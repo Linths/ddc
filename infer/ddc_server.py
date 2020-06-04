@@ -42,7 +42,7 @@ def load_sp_model(sp_ckpt_fp, batch_size=128):
             opt=None,
             export_feat_name=None,
             zack_hack=0)
-    model_sp_vars = filter(lambda v: 'model_sp' in v.name, tf.all_variables())
+    model_sp_vars = filter(lambda v: 'model_sp' in v.name, tf.global_variables())
     model_sp_vars = [x for x in model_sp_vars]
     saver = tf.train.Saver(model_sp_vars)
     saver.restore(sess, sp_ckpt_fp)
@@ -80,7 +80,7 @@ def load_ss_model(ss_ckpt_fp):
             dnn_init=None,
             dnn_keep_prob=1.0
         )
-    model_ss_vars = filter(lambda v: 'model_ss' in v.name, tf.all_variables())
+    model_ss_vars = filter(lambda v: 'model_ss' in v.name, tf.global_variables())
     model_ss_vars = [x for x in model_ss_vars]
     saver = tf.train.Saver(model_ss_vars)
     saver.restore(sess, ss_ckpt_fp)
