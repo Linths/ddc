@@ -6,6 +6,7 @@
 from collections import Counter
 import math
 import random
+from functools import reduce
 
 import numpy as np
 

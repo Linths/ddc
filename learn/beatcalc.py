@@ -24,6 +24,9 @@ class BeatCalc(object):
                 stops[beat] += stop
             stops[beat] = stop
         beat_stop = filter(lambda x: x[1] != 0.0, sorted(stops.items(), key=lambda x: x[0]))
+        beat_stop = list(beat_stop)
+        # print(f"Beat stop HERE: {[x for x in beat_stop]}")
+        # print(f"Beat stop HERE: {beat_stop}")
 
         self.offset = offset
         self.bpms = beat_bpm

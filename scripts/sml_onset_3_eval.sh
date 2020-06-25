@@ -3,7 +3,7 @@ EXP_DIR=${SM_DIR}/trained/onset/17_01_23_00_cnn_diff_eval
 
 pushd ../smlearn
 
-python onset_train.py \
+python3 onset_train.py \
 	--test_txt_fp=${SM_DIR}/data/chart_onset/fraxtil_test.txt \
 	--model_ckpt_fp=${EXP_DIR}/onset_net_early_stop-88800 \
 	--audio_context_radius=7 \

@@ -4,7 +4,7 @@ SM_DIR=/work/03860/cdonahue/maverick/sm
 
 EXP_DIR=${SM_DIR}/trained/onset/17_02_05_00_fraxnew_cnn_export
 
-python onset_train.py \
+python3 onset_train.py \
 	--train_txt_fp=${SM_DIR}/data/chart_onset/fraxtil/mel80nfft3/fraxtil_train.txt \
 	--valid_txt_fp=${SM_DIR}/data/chart_onset/fraxtil/mel80nfft3/fraxtil_valid.txt \
 	--z_score \

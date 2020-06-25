@@ -1,5 +1,5 @@
 import random
-
+from functools import reduce
 import tensorflow as tf
 import numpy as np
 
@@ -112,7 +112,7 @@ class OnsetNet:
             nfeats_conv = reduce(lambda x, y: x * y, [int(x) for x in cnn_output.get_shape()[-3:]])
         feats_conv = tf.reshape(cnn_output, [batch_size * rnn_nunroll, nfeats_conv])
         nfeats_tot = nfeats_conv + nfeats
-        feats_all = tf.concat([feats_conv, feats_other], axis=1)
+        feats_all = tf.concat(values=[feats_conv, feats_other], axis=1)
         print('feats_cnn: {}'.format(feats_conv.get_shape()))
         print('feats_all: {}'.format(feats_all.get_shape()))
 

@@ -4,7 +4,7 @@ EXP_DIR=/tmp/train
 rm -rf ${EXP_DIR}
 mkdir -p ${EXP_DIR}
 
-python onset_train.py \
+python3 onset_train.py \
         --train_txt_fp=${SM_DIR}/data/chart_onset/${1}/mel80hop441/${1}_train.txt \
         --valid_txt_fp=${SM_DIR}/data/chart_onset/${1}/mel80hop441/${1}_valid.txt \
         --z_score \
