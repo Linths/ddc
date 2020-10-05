@@ -1,6 +1,6 @@
 source smd_0_push.sh
 
-python dataset_json.py \
+python3 dataset_json.py \
 	${SMDATA_DIR}/json_filt/${1} \
 	--splits=8,1,1 \
 	--splitnames=train,valid,test \
