@@ -49,7 +49,8 @@ if __name__ == '__main__':
     import json
     import os
     import tensorflow as tf
-    print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
+    print("Num GPUs available: ", len(tf.config.experimental.list_physical_devices('GPU')))
+    print("Devices available: ", tf.config.experimental.list_physical_devices())
 
     parser = argparse.ArgumentParser()
 
