@@ -77,14 +77,14 @@ if __name__ == '__main__':
         songs_time_annotated += max_time_annotated
 
         coarses = ['Beginner', 'Easy', 'Medium', 'Hard', 'Challenge']
-        for i, coarse in enumerate(coarses):
-            for coarse_next in coarses:
-                beats = coarse_to_beats[coarse]
-                beats_next = coarse_to_beats[coarse_next]
-                chart_coarse_to_superset[(coarse, coarse_next)].append(len(beats & beats_next) / float(len(beats)))
+        # for i, coarse in enumerate(coarses):
+        #     for coarse_next in coarses:
+        #         beats = coarse_to_beats[coarse]
+        #         beats_next = coarse_to_beats[coarse_next]
+        #         chart_coarse_to_superset[(coarse, coarse_next)].append(len(beats & beats_next) / float(len(beats)))
 
     chart_coarse_to_stream = {k: sum(l) / len(l) for k, l in chart_coarse_to_stream.items()}
-    chart_coarse_to_superset = {k: (reduce(lambda x, y: x + y, l) / len(l)) for k, l in chart_coarse_to_superset.items()}
+    # chart_coarse_to_superset = {k: (reduce(lambda x, y: x + y, l) / len(l)) for k, l in chart_coarse_to_superset.items()}
 
     nsongs = len(json_fps)
     ncharts = sum(chart_feet.values())
@@ -103,7 +103,7 @@ if __name__ == '__main__':
     print('Chart coarse difficulties: {}'.format(chart_diff_coarse))
     print('Chart feet: {}'.format(chart_feet))
     print('Chart coarse avg arrows per second: {}'.format(chart_coarse_to_stream))
-    print('Chart coarse avg superset: {}'.format(chart_coarse_to_superset))
+    # print('Chart coarse avg superset: {}'.format(chart_coarse_to_superset))
     print('Chart freetext fields: {}'.format(chart_freetexts))
     print('Chart vocabulary (size={}): {}'.format(len(vocab), vocab))
     print('Beat phases: {}'.format(beat_phases))

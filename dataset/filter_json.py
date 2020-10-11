@@ -42,7 +42,8 @@ if __name__ == '__main__':
 
     chart_types = set(filter(lambda x: bool(x), [x.strip() for x in args.chart_types.split(',')]))
     chart_difficulties = set(filter(lambda x: bool(x), [x.strip() for x in args.chart_difficulties.split(',')]))
-    substitutions = filter(lambda x: bool(x), [x.strip() for x in args.substitutions.split(',')])
+    substitutions = []
+    substitutions[:] = filter(lambda x: bool(x), [x.strip() for x in args.substitutions.split(',')])
     assert len(substitutions) % 2 == 0
     substitutions = [(substitutions[i], substitutions[i + 1]) for i in range(0, len(substitutions), 2)]
     substitutions = {x.strip():y.strip() for x, y in substitutions}
@@ -183,6 +184,11 @@ if __name__ == '__main__':
 
                     chart_meta['notes'] = notes_cleaned
 
+                # TODO: remove empty notes check when bug is fixed
+                if chart_meta['notes'] == []:
+                    print(f"Unacceptable, no notes ({chart_meta['difficulty_coarse']})")
+                    continue
+                
                 if len(ppms) > 0:
                     acceptable = True
                     for (_, ppm, _), _, _, _ in chart_meta['notes']:
