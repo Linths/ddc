@@ -1,0 +1,2 @@
+model_checkpoint_path: "ddr_weights_long_epoch_1"
+all_model_checkpoint_paths: "ddr_weights_long_epoch_1"
