@@ -7,8 +7,6 @@ import gc
 import matplotlib.pyplot as plt
 import seaborn as sns
 from timeit import default_timer as timer
-from os import listdir
-from os.path import isfile, join
 
 from util import *
 from util2 import *

@@ -1,3 +1,9 @@
+from os import listdir
+from os.path import isfile, join
+import numpy as np
+
+np.set_printoptions(precision=3)
+
 def prtval(string, value):
   print(f"{string:19s}: {value}")
 
