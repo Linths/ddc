@@ -16,9 +16,12 @@ np.set_printoptions(precision=3)
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
 DO_TRAIN = True
+SAVE_TF = True
 WEIGHTS_FILE = 'ddr_weights_long'
 TRAIN_DIR = '../data/data_split/train'
 TEST_DIR = '../data/data_split/test'
+TRAIN_TF_DIR = '../data/tf/train'
+TEST_TF_DIR = '../data/tf/test'
 EPOCHS = 5
 CONTEXT = 7
 BATCH_SIZE = 256
@@ -51,17 +54,46 @@ def gen(song_paths):
     # gc.collect()
     # print(f'Collected {gc.collect()} after one song')
 
-train_ds = tf.data.Dataset.from_generator(
-    train_gen,
-    (tf.float32, tf.uint8)
-)
-train_ds = train_ds.shuffle(10000).batch(BATCH_SIZE)
+if SAVE_TF:
+  train_ds = tf.data.Dataset.from_generator(
+      train_gen,
+      (tf.float32, tf.uint8)
+  )
+  # train_ds = train_ds.shuffle(10000).batch(BATCH_SIZE)
 
-test_ds = tf.data.Dataset.from_generator(
-    test_gen,
-    (tf.float32, tf.uint8)
-)
-test_ds = test_ds.batch(BATCH_SIZE) # This fixes mem issue, but shuffling should be used for trainset
+  test_ds = tf.data.Dataset.from_generator(
+      test_gen,
+      (tf.float32, tf.uint8)
+  )
+  # test_ds = test_ds.batch(BATCH_SIZE) # This fixes mem issue, but shuffling should be used for trainset
+
+  start = timer()
+  tf.data.experimental.save(train_ds, TRAIN_TF_DIR)
+  end = timer()
+  print(f'[Train] Saved in {end-start} sec.')
+
+  start = timer()
+  tf.data.experimental.save(test_ds, TEST_TF_DIR)
+  end = timer()
+  print(f'[Test] Saved in {end-start} sec.')
+
+train_ds_loaded = tf.data.experimental.load(TRAIN_TF_DIR,
+    (tf.TensorSpec(shape=(2*CONTEXT+1, 80, 3), dtype=tf.float32),
+     tf.TensorSpec(shape=(), dtype=tf.uint8)))
+
+test_ds_loaded = tf.data.experimental.load(TEST_TF_DIR,
+    (tf.TensorSpec(shape=(2*CONTEXT+1, 80, 3), dtype=tf.float32),
+     tf.TensorSpec(shape=(), dtype=tf.uint8)))
+
+start = timer()
+train_ds_loaded = train_ds_loaded.batch(BATCH_SIZE)
+end = timer()
+print(f'[Train] Batched in {end-start} sec.')
+
+start = timer()
+test_ds_loaded = test_ds_loaded.batch(BATCH_SIZE)
+end = timer()
+print(f'[Test] Batched in {end-start} sec.')
 
 # Model architecture
 class MyModel(Model):
@@ -134,10 +166,10 @@ if DO_TRAIN:
     test_loss.reset_states()
     test_accuracy.reset_states()
 
-    for images, labels in train_ds:
+    for images, labels in train_ds_loaded:
       train_step(np.asarray(images), np.asarray(labels))
 
-    for test_images, test_labels in test_ds:
+    for test_images, test_labels in test_ds_loaded:
       test_step(test_images, test_labels)
 
     end = timer()
@@ -162,7 +194,7 @@ else:
   y_true = []
   y_pred = []
 
-  for test_images, test_labels in test_ds:
+  for test_images, test_labels in test_ds_loaded:
     y_true.extend(test_labels)
     last_layer = test_step(test_images, test_labels)
     pred = np.argmax(last_layer, axis=1)

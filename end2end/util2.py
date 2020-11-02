@@ -57,4 +57,4 @@ def get_context_data_at(chart, index, onsets_steps, context):
 def reduce2np(data, context):
   select_channels([data], channels)
   charts = flatten_dataset_to_charts([data])
-  return [get_context_data(chart, context) for chart in charts]
+  return [get_context_data(chart, context) for chart in charts  if chart.get_coarse_difficulty() == 'Easy']
