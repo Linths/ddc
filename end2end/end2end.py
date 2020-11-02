@@ -16,18 +16,12 @@ np.set_printoptions(precision=3)
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
 DO_TRAIN = True
-WEIGHTS_FILE = '/content/gdrive/My Drive/ddr_weights_long'
-TRAIN_DIR = 'data/data_split/train'
-TEST_DIR = 'data/data_split/test'
+WEIGHTS_FILE = 'ddr_weights_long'
+TRAIN_DIR = '../data/data_split/train'
+TEST_DIR = '../data/data_split/test'
 EPOCHS = 5
 CONTEXT = 7
 BATCH_SIZE = 256
-
-dtype = tf.float32
-np_dtype = dtype.as_numpy_dtype
-diff_coarse_to_id = load_id_dict("diff_coarse_to_id.txt")
-audio_select_channels = '0,1,2'
-channels = stride_csv_arg_list(audio_select_channels, 1, int)
 
 # Loading data
 def train_gen():
@@ -45,7 +39,7 @@ def gen(song_paths):
   for song in song_paths:
     song_data = None
     with open(song, 'rb') as f:
-      song_data = reduce2np(pickle.load(f))
+      song_data = reduce2np(pickle.load(f), CONTEXT)
     # gc.collect()
     # print(f'Collected {gc.collect()} after pickle load')
     for chart_data in song_data:
