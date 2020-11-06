@@ -19,7 +19,7 @@ print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('
 DO_TRAIN = True
 SAVE_TF = True
 
-WEIGHTS_FILE = 'ddr_weights_long'
+WEIGHTS_FILE = 'ddr_weights'
 TRAIN_DIR = '../data/data_split/train'
 TEST_DIR = '../data/data_split/test'
 TF_DIR = '../data/tf'
@@ -61,8 +61,8 @@ def build_ds(dir):
     return total_ds
 
 if SAVE_TF:
-  subprocess.run("rm", "-rf", f"{TRAIN_TF_DIR}/*")
-  subprocess.run("rm", "-rf", f"{TEST_TF_DIR}/*")
+  subprocess.run(["rm", "-rf", f"{TRAIN_TF_DIR}/*"])
+  subprocess.run(["rm", "-rf", f"{TEST_TF_DIR}/*"])
 
   train_ds = build_ds(TRAIN_DIR)
   test_ds = build_ds(TEST_DIR)
@@ -87,7 +87,7 @@ if SAVE_TF:
   end = timer()
   print(f'[Test] Saved in {end-start} sec.')
 
-  subprocess.run("du", "-h", TF_DIR)
+  subprocess.run(["du", "-h", TF_DIR])
 
 
 start = timer()
