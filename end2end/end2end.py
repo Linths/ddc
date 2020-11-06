@@ -61,19 +61,19 @@ def build_ds(dir):
     return total_ds
 
 if SAVE_TF:
-  subprocess.run("rm", "-rf", "train_ds/*")
-  subprocess.run("rm", "-rf", "test_ds/*")
+  subprocess.run("rm", "-rf", f"{TRAIN_TF_DIR}/*")
+  subprocess.run("rm", "-rf", f"{TEST_TF_DIR}/*")
 
   train_ds = build_ds(TRAIN_DIR)
   test_ds = build_ds(TEST_DIR)
 
   start = timer()
-  tf.data.experimental.save(train_ds, "train_ds")
+  tf.data.experimental.save(train_ds, TRAIN_TF_DIR)
   end = timer()
   print(f'[Train] Done in {end-start} sec.')
 
   start = timer()
-  tf.data.experimental.save(test_ds, "test_ds")
+  tf.data.experimental.save(test_ds, TEST_TF_DIR)
   end = timer()
   print(f'[Test] Done in {end-start} sec.')
 
@@ -89,16 +89,9 @@ if SAVE_TF:
 
   subprocess.run("du", "-h", TF_DIR)
 
-train_ds_loaded = tf.data.experimental.load(TRAIN_TF_DIR,
-    (tf.TensorSpec(shape=(2*CONTEXT+1, 80, 3), dtype=tf.float32),
-     tf.TensorSpec(shape=(), dtype=tf.uint8)))
-
-test_ds_loaded = tf.data.experimental.load(TEST_TF_DIR,
-    (tf.TensorSpec(shape=(2*CONTEXT+1, 80, 3), dtype=tf.float32),
-     tf.TensorSpec(shape=(), dtype=tf.uint8)))
 
 start = timer()
-train_ds_loaded = tf.data.experimental.load("train_ds",
+train_ds_loaded = tf.data.experimental.load(TRAIN_TF_DIR,
     (tf.TensorSpec(shape=(WINDOW, 80, 3), dtype=tf.float32),
      tf.TensorSpec(shape=(), dtype=tf.uint8)))
 train_ds_loaded = train_ds_loaded.batch(BATCH_SIZE)
@@ -106,7 +99,7 @@ end = timer()
 print(f'[Train] Batched in {end-start} sec.')
 
 start = timer()
-test_ds_loaded = tf.data.experimental.load("test_ds",
+test_ds_loaded = tf.data.experimental.load(TEST_TF_DIR",
     (tf.TensorSpec(shape=(WINDOW, 80, 3), dtype=tf.float32),
      tf.TensorSpec(shape=(), dtype=tf.uint8)))
 test_ds_loaded = test_ds_loaded.batch(BATCH_SIZE)
