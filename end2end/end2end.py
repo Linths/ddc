@@ -16,8 +16,8 @@ np.set_printoptions(precision=3)
 
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
-DO_TRAIN = True
-SAVE_TF = True
+DO_TRAIN = False
+SAVE_TF = False
 
 WEIGHTS_FILE = 'weights/weights'
 TRAIN_DIR = '../data/data_split/train'
@@ -90,6 +90,7 @@ train_ds_loaded = tf.data.experimental.load(TRAIN_TF_DIR,
 train_ds_loaded = train_ds_loaded.batch(BATCH_SIZE)
 end = timer()
 print(f'[Train] Batched in {end-start} sec.')
+print(len(train_ds_loaded))
 
 start = timer()
 test_ds_loaded = tf.data.experimental.load(TEST_TF_DIR,
@@ -98,6 +99,7 @@ test_ds_loaded = tf.data.experimental.load(TEST_TF_DIR,
 test_ds_loaded = test_ds_loaded.batch(BATCH_SIZE)
 end = timer()
 print(f'[Test] Batched in {end-start} sec.')
+print(len(test_ds_loaded))
 
 # Model architecture
 class MyModel(Model):
