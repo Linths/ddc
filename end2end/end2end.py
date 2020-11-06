@@ -7,6 +7,7 @@ import gc
 import matplotlib.pyplot as plt
 import seaborn as sns
 from timeit import default_timer as timer
+import subprocess
 
 from util import *
 from util2 import *
@@ -17,55 +18,64 @@ print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('
 
 DO_TRAIN = True
 SAVE_TF = True
+
 WEIGHTS_FILE = 'ddr_weights_long'
 TRAIN_DIR = '../data/data_split/train'
 TEST_DIR = '../data/data_split/test'
-TRAIN_TF_DIR = '../data/tf/train'
-TEST_TF_DIR = '../data/tf/test'
+TF_DIR = '../data/tf'
+TRAIN_TF_DIR = f'{TF_DIR}/train'
+TEST_TF_DIR = f'{TF_DIR}/test'
+
 EPOCHS = 5
 CONTEXT = 7
+WINDOW = 2*CONTEXT+1
 BATCH_SIZE = 256
 
 # Loading data
-def train_gen():
-  song_paths = files_in(TRAIN_DIR)
-  # TODO: Randomize file order
-  # song_paths = ["data/train/Fraxtil_sArrowArrangements_PainGame.pkl", "data/train/Fraxtil_sArrowArrangements_NoBeginning.pkl"]
-  return gen(song_paths)
+def song_gen(song_path):
+  song_data = None
+  with open(song_path, 'rb') as f:
+    song_data = reduce2np(pickle.load(f))
+  for chart_data in song_data:
+    for time_step in chart_data:
+      yield time_step
+  del song_data
 
-def test_gen():
-  song_paths = files_in(TEST_DIR)
-  # song_paths = ["data/test/Fraxtil_sArrowArrangements_InnerUniverse_ExtendedMix_.pkl", "data/test2/Fraxtil_sArrowArrangements_Named_TheMoon_.pkl", "data/test2/Fraxtil_sBeastBeats_KokeshiNekoMedley.pkl", "data/test2/Fraxtil_sBeastBeats_Mess.pkl"]
-  return gen(song_paths)
+def get_right_label(labels):
+  return labels.skip(CONTEXT).take(1)
 
-def gen(song_paths):
-  for song in song_paths:
-    song_data = None
-    with open(song, 'rb') as f:
-      song_data = reduce2np(pickle.load(f), CONTEXT)
-    # gc.collect()
-    # print(f'Collected {gc.collect()} after pickle load')
-    for chart_data in song_data:
-      for time_step in chart_data:
-        yield time_step
-      # del chart_data
-      # del time_step
-    del song_data
-    # gc.collect()
-    # print(f'Collected {gc.collect()} after one song')
+def build_ds(dir):
+  total_ds = None
+  for song_path in files_in(dir):
+    ds = tf.data.Dataset.from_generator(
+      lambda: song_gen(song_path),
+      (tf.float32, tf.uint8)
+    )
+    ds = ds.window(size=WINDOW, shift=1, drop_remainder=True)
+    ds = ds.flat_map(lambda x,y: tf.data.Dataset.zip((x.batch(WINDOW), get_right_label(y))))
+
+    if total_ds == None:
+      total_ds = ds
+    else:
+      total_ds.concatenate(ds)
+    return total_ds
 
 if SAVE_TF:
-  train_ds = tf.data.Dataset.from_generator(
-      train_gen,
-      (tf.float32, tf.uint8)
-  )
-  # train_ds = train_ds.shuffle(10000).batch(BATCH_SIZE)
+  subprocess.run("rm", "-rf", "train_ds/*")
+  subprocess.run("rm", "-rf", "test_ds/*")
 
-  test_ds = tf.data.Dataset.from_generator(
-      test_gen,
-      (tf.float32, tf.uint8)
-  )
-  # test_ds = test_ds.batch(BATCH_SIZE) # This fixes mem issue, but shuffling should be used for trainset
+  train_ds = build_ds(TRAIN_DIR)
+  test_ds = build_ds(TEST_DIR)
+
+  start = timer()
+  tf.data.experimental.save(train_ds, "train_ds")
+  end = timer()
+  print(f'[Train] Done in {end-start} sec.')
+
+  start = timer()
+  tf.data.experimental.save(test_ds, "test_ds")
+  end = timer()
+  print(f'[Test] Done in {end-start} sec.')
 
   start = timer()
   tf.data.experimental.save(train_ds, TRAIN_TF_DIR)
@@ -77,6 +87,8 @@ if SAVE_TF:
   end = timer()
   print(f'[Test] Saved in {end-start} sec.')
 
+  subprocess.run("du", "-h", TF_DIR)
+
 train_ds_loaded = tf.data.experimental.load(TRAIN_TF_DIR,
     (tf.TensorSpec(shape=(2*CONTEXT+1, 80, 3), dtype=tf.float32),
      tf.TensorSpec(shape=(), dtype=tf.uint8)))
@@ -86,11 +98,17 @@ test_ds_loaded = tf.data.experimental.load(TEST_TF_DIR,
      tf.TensorSpec(shape=(), dtype=tf.uint8)))
 
 start = timer()
+train_ds_loaded = tf.data.experimental.load("train_ds",
+    (tf.TensorSpec(shape=(WINDOW, 80, 3), dtype=tf.float32),
+     tf.TensorSpec(shape=(), dtype=tf.uint8)))
 train_ds_loaded = train_ds_loaded.batch(BATCH_SIZE)
 end = timer()
 print(f'[Train] Batched in {end-start} sec.')
 
 start = timer()
+test_ds_loaded = tf.data.experimental.load("test_ds",
+    (tf.TensorSpec(shape=(WINDOW, 80, 3), dtype=tf.float32),
+     tf.TensorSpec(shape=(), dtype=tf.uint8)))
 test_ds_loaded = test_ds_loaded.batch(BATCH_SIZE)
 end = timer()
 print(f'[Test] Batched in {end-start} sec.')
@@ -117,7 +135,6 @@ class MyModel(Model):
     x = self.flatten(x)
     x = self.rnn(x)
     return self.fc1(x)
-
 # Create an instance of the model
 model = MyModel()
 
@@ -166,11 +183,10 @@ if DO_TRAIN:
     test_loss.reset_states()
     test_accuracy.reset_states()
 
-    for images, labels in train_ds_loaded:
-      train_step(np.asarray(images), np.asarray(labels))
-
-    for test_images, test_labels in test_ds_loaded:
-      test_step(test_images, test_labels)
+    for feats, labels in train_ds_loaded:
+      train_step(np.asarray(feats), np.asarray(labels))
+    for feats, labels in test_ds_loaded:
+      test_step(feats, labels)
 
     end = timer()
 
