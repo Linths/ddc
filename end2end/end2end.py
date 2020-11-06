@@ -99,7 +99,7 @@ end = timer()
 print(f'[Train] Batched in {end-start} sec.')
 
 start = timer()
-test_ds_loaded = tf.data.experimental.load(TEST_TF_DIR",
+test_ds_loaded = tf.data.experimental.load(TEST_TF_DIR,
     (tf.TensorSpec(shape=(WINDOW, 80, 3), dtype=tf.float32),
      tf.TensorSpec(shape=(), dtype=tf.uint8)))
 test_ds_loaded = test_ds_loaded.batch(BATCH_SIZE)
