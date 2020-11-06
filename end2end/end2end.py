@@ -19,7 +19,7 @@ print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('
 DO_TRAIN = True
 SAVE_TF = True
 
-WEIGHTS_FILE = 'ddr_weights'
+WEIGHTS_FILE = 'weights/weights'
 TRAIN_DIR = '../data/data_split/train'
 TEST_DIR = '../data/data_split/test'
 TF_DIR = '../data/tf'
@@ -33,6 +33,7 @@ BATCH_SIZE = 256
 
 # Loading data
 def song_gen(song_path):
+  print(song_path)
   song_data = None
   with open(song_path, 'rb') as f:
     song_data = reduce2np(pickle.load(f))
@@ -47,45 +48,37 @@ def get_right_label(labels):
 def build_ds(dir):
   total_ds = None
   for song_path in files_in(dir):
+    #print(song_path)
     ds = tf.data.Dataset.from_generator(
       lambda: song_gen(song_path),
       (tf.float32, tf.uint8)
     )
     ds = ds.window(size=WINDOW, shift=1, drop_remainder=True)
     ds = ds.flat_map(lambda x,y: tf.data.Dataset.zip((x.batch(WINDOW), get_right_label(y))))
+    for x,y in ds:
+      pass
 
     if total_ds == None:
       total_ds = ds
     else:
       total_ds.concatenate(ds)
-    return total_ds
+  return total_ds
 
 if SAVE_TF:
   subprocess.run(["rm", "-rf", f"{TRAIN_TF_DIR}/*"])
   subprocess.run(["rm", "-rf", f"{TEST_TF_DIR}/*"])
 
-  train_ds = build_ds(TRAIN_DIR)
-  test_ds = build_ds(TEST_DIR)
-
   start = timer()
+  train_ds = build_ds(TRAIN_DIR)
   tf.data.experimental.save(train_ds, TRAIN_TF_DIR)
   end = timer()
   print(f'[Train] Done in {end-start} sec.')
 
   start = timer()
+  test_ds = build_ds(TEST_DIR)
   tf.data.experimental.save(test_ds, TEST_TF_DIR)
   end = timer()
   print(f'[Test] Done in {end-start} sec.')
-
-  start = timer()
-  tf.data.experimental.save(train_ds, TRAIN_TF_DIR)
-  end = timer()
-  print(f'[Train] Saved in {end-start} sec.')
-
-  start = timer()
-  tf.data.experimental.save(test_ds, TEST_TF_DIR)
-  end = timer()
-  print(f'[Test] Saved in {end-start} sec.')
 
   subprocess.run(["du", "-h", TF_DIR])
 
