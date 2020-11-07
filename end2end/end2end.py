@@ -47,43 +47,18 @@ def get_right_label(labels):
   return labels.skip(CONTEXT).take(1)
 
 def build_song_ds(song_path):
-  # total_ds = None #tf.data.Datset.from_tensor_slices(np.empty((WINDOW,80,3)))
-  # print(total_ds)
-  # for song_path in files_in(dir)[:3]:
-    #print(song_path)
   ds = tf.data.Dataset.from_generator(
     lambda: song_gen(song_path),
     (tf.float32, tf.uint8)
   )
   ds = ds.window(size=WINDOW, shift=1, drop_remainder=True)
   ds = ds.flat_map(lambda x,y: tf.data.Dataset.zip((x.batch(WINDOW), get_right_label(y))))
-  return ds
-    #i = 0
-    #print(len(ds))
-    #for x,y in ds:
-    #  i += 1
-    #print(f'\t{i} timesteps')
-
-    # if total_ds == None:
-    #   total_ds = ds
-    # else:
-    #   total_ds = total_ds.concatenate(ds)
-  
+  return ds  
 
 def build_ds(dir):
-  #total_ds = tf.data.Datset.from_tensor_slices(dir)
   all_ds = [build_song_ds(file) for file in files_in(dir)]
   total_ds = total_ds.flat_map(lambda x: x)
-  # total_ds = total_ds.flat_map(lambda x: build_song_ds(x))
-  # for ds in all_ds:
   return
-  # i = 0
-  # for x,y in total_ds:
-  #   i += 1
-  # print(f'[{i} total]')
-  # return total_ds
-
-# def concat()
 
 if SAVE_TF:
   subprocess.run(["rm", "-rf", f"{TRAIN_TF_DIR}/*"])
@@ -102,7 +77,6 @@ if SAVE_TF:
   print(f'[Test] Done in {end-start} sec.')
 
   subprocess.run(["du", "-h", TF_DIR])
-
 
 start = timer()
 train_ds_loaded = tf.data.experimental.load(TRAIN_TF_DIR,
@@ -140,10 +114,10 @@ class MyModel(Model):
     x = self.max1(x)
     x = self.conv2(x)
     x = self.max2(x)
-    # prtval('Shape after max2', x.shape)
     x = self.flatten(x)
     x = self.rnn(x)
     return self.fc1(x)
+
 # Create an instance of the model
 model = MyModel()
 
@@ -175,7 +149,6 @@ def test_step(images, labels):
   # behavior during training versus inference (e.g. Dropout).
   predictions = model(images, training=False)
   t_loss = loss_object(labels, predictions)
-
   test_loss(t_loss)
   test_accuracy(labels, predictions)
   return predictions
@@ -238,4 +211,4 @@ else:
   sns.heatmap(confusion_mtx, annot=False, fmt='g')
   plt.xlabel('Prediction')
   plt.ylabel('Label')
-  plt.show()
+  plt.show() # TOFO plt.savefig
