@@ -58,9 +58,6 @@ def build_song_ds(song_path):
 
 def build_ds(dir):
   all_ds = [build_song_ds(file) for file in files_in(dir)]
-  #total_ds = total_ds.flat_map(lambda x: x)
-  # total_ds = total_ds.flat_map(lambda x: build_song_ds(x))
-  # for ds in all_ds:
   total_ds = all_ds[0]
   for ds in all_ds[1:]:
     total_ds = total_ds.concatenate(ds)
