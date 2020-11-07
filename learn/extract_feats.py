@@ -48,9 +48,6 @@ if __name__ == '__main__':
     import pickle
     import json
     import os
-    import tensorflow as tf
-    print("Num GPUs available: ", len(tf.config.experimental.list_physical_devices('GPU')))
-    print("Devices available: ", tf.config.experimental.list_physical_devices())
 
     parser = argparse.ArgumentParser()
 
