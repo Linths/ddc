@@ -16,8 +16,8 @@ np.set_printoptions(precision=3)
 
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
-DO_TRAIN = False #True
-SAVE_TF = False #True
+DO_TRAIN = False
+SAVE_TF = False
 
 WEIGHTS_FILE = 'weights/weights'
 TRAIN_DIR = '../data/data_split/train'
@@ -162,9 +162,7 @@ def test_step(images, labels):
   test_accuracy(labels, predictions)
   return predictions
 
-
-# Run the NN
-if DO_TRAIN:
+def train(train_ds, test_ds):
   print(f"Train and test for {EPOCHS} epochs")
 
   for epoch in range(EPOCHS):
@@ -174,9 +172,9 @@ if DO_TRAIN:
     test_loss.reset_states()
     test_accuracy.reset_states()
 
-    for feats, labels in train_ds_loaded:
+    for feats, labels in train_ds:
       train_step(np.asarray(feats), np.asarray(labels))
-    for feats, labels in test_ds_loaded:
+    for feats, labels in test_ds:
       test_step(feats, labels)
 
     end = timer()
@@ -192,7 +190,7 @@ if DO_TRAIN:
     model.save_weights(WEIGHTS_FILE+f'_epoch_{epoch}')
   model.save_weights(WEIGHTS_FILE)
   
-else:
+def test(test_ds, show_confmat=False):
   print("Testing once")
   model.load_weights(WEIGHTS_FILE)
   start = timer()
@@ -201,10 +199,12 @@ else:
   y_true = []
   y_pred = []
 
-  for test_images, test_labels in test_ds_loaded:
-    y_true.extend(test_labels)
-    last_layer = test_step(test_images, test_labels)
+  for feats, labels in test_ds:
+    y_true.extend(labels)
+    last_layer = test_step(feats, labels)
+    # last_layer = last_layer[:, 1:] # FIXME: now never predicts NO_STEP
     pred = np.argmax(last_layer, axis=1)
+    # pred = np.argmax(last_layer, axis=1) + 1 # FIXME: now never predicts NO_STEP
     y_pred.extend(pred)
   
   end = timer()
@@ -215,9 +215,18 @@ else:
     f'Time: {end - start}s'
   )
 
-  confusion_mtx = tf.math.confusion_matrix(y_true, y_pred) 
-  plt.figure(figsize=(60, 48))
-  sns.heatmap(confusion_mtx, annot=False, fmt='g')
-  plt.xlabel('Prediction')
-  plt.ylabel('Label')
-  plt.show() # TOFO plt.savefig
+  if show_confmat:
+    confusion_mtx = tf.math.confusion_matrix(y_true, y_pred) 
+    plt.figure(figsize=(60, 48))
+    sns.heatmap(confusion_mtx, annot=False, fmt='g')
+    plt.xlabel('Prediction')
+    plt.ylabel('Label')
+    plt.show() # TODO plt.savefig
+  return y_pred
+
+# Run the NN
+if DO_TRAIN:
+  train(train_ds_loaded, test_ds_loaded)
+else:
+  predicted_steps = test(test_ds_loaded)
+  print([i for i, step in enumerate(predicted_steps) if step != 0])

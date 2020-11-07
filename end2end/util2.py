@@ -44,6 +44,20 @@ for i in range(4):
         assert num == correct_num
         correct_num += 1
 
+def num2step(step_num):
+  # Ex. converts the number 194 = 0b11000010 to the 3002 step
+  result = ""
+  for i in reversed(range(4)):
+    tile_state = (step_num >> i*2) & 0b11
+    result += str(tile_state)
+  return result
+
+assert num2step(194) == '3002'
+assert num2step(195) == '3003'
+
+for i in range(256):
+  assert step2num(num2step(i)) == i
+
 def get_context_data(chart):
   nframes = chart.get_nframes()
   onsets_steps = {int(round(t / chart.dt)): step2num(step) for _, _, t, step in chart.annotations}
