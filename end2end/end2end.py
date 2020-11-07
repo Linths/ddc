@@ -16,8 +16,8 @@ np.set_printoptions(precision=3)
 
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
-DO_TRAIN = True
-SAVE_TF = True
+DO_TRAIN = False #True
+SAVE_TF = False #True
 
 WEIGHTS_FILE = 'weights/weights'
 TRAIN_DIR = '../data/data_split/train'
@@ -38,8 +38,9 @@ def song_gen(song_path):
   with open(song_path, 'rb') as f:
     song_data = reduce2np(pickle.load(f))
   print(f'\t{len(song_data)} charts')
-  for chart_data in song_data:
-    for time_step in chart_data:
+  for chart_data in song_data[:1]:
+   print(f'\t{len(chart_data)} timesteps') 
+   for time_step in chart_data:
       yield time_step
   del song_data
 
@@ -57,8 +58,19 @@ def build_song_ds(song_path):
 
 def build_ds(dir):
   all_ds = [build_song_ds(file) for file in files_in(dir)]
-  total_ds = total_ds.flat_map(lambda x: x)
-  return
+  #total_ds = total_ds.flat_map(lambda x: x)
+  # total_ds = total_ds.flat_map(lambda x: build_song_ds(x))
+  # for ds in all_ds:
+  total_ds = all_ds[0]
+  for ds in all_ds[1:]:
+    total_ds = total_ds.concatenate(ds)
+  i = 0
+  for x,y in total_ds:
+    i += 1
+  print(f'[{i} total]')
+  return total_ds
+
+# def concat()
 
 if SAVE_TF:
   subprocess.run(["rm", "-rf", f"{TRAIN_TF_DIR}/*"])
