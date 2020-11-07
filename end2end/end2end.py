@@ -46,34 +46,39 @@ def song_gen(song_path):
 def get_right_label(labels):
   return labels.skip(CONTEXT).take(1)
 
-def build_ds(dir):
-  total_ds = None #tf.data.Datset.from_tensor_slices(np.empty((WINDOW,80,3)))
-  print(total_ds)
-  for song_path in files_in(dir)[:3]:
+def build_song_ds(song_path):
+  # total_ds = None #tf.data.Datset.from_tensor_slices(np.empty((WINDOW,80,3)))
+  # print(total_ds)
+  # for song_path in files_in(dir)[:3]:
     #print(song_path)
-    ds = tf.data.Dataset.from_generator(
-      lambda: song_gen(song_path),
-      (tf.float32, tf.uint8)
-    )
-    ds = ds.window(size=WINDOW, shift=1, drop_remainder=True)
-    ds = ds.flat_map(lambda x,y: tf.data.Dataset.zip((x.batch(WINDOW), get_right_label(y))))
-
+  ds = tf.data.Dataset.from_generator(
+    lambda: song_gen(song_path),
+    (tf.float32, tf.uint8)
+  )
+  ds = ds.window(size=WINDOW, shift=1, drop_remainder=True)
+  ds = ds.flat_map(lambda x,y: tf.data.Dataset.zip((x.batch(WINDOW), get_right_label(y))))
+  return ds
     #i = 0
     #print(len(ds))
     #for x,y in ds:
     #  i += 1
     #print(f'\t{i} timesteps')
 
-    if total_ds == None:
-      total_ds = ds
-    else:
-      total_ds = total_ds.concatenate(ds)
+    # if total_ds == None:
+    #   total_ds = ds
+    # else:
+    #   total_ds = total_ds.concatenate(ds)
+  
 
-  i = 0
-  for x,y in total_ds:
-    i += 1
-  print(f'[{i} total]')
+  def build_ds(dir):
+    total_ds = tf.data.Datset.from_tensor_slices(dir)
+    total_ds = total_ds.flat_map(lambda x: build_song_ds(x))
+    i = 0
+    for x,y in total_ds:
+      i += 1
+    print(f'[{i} total]')
   return total_ds
+
 
 
 if SAVE_TF:
