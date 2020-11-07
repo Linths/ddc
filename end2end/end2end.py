@@ -16,8 +16,8 @@ np.set_printoptions(precision=3)
 
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
-DO_TRAIN = False
-SAVE_TF = False
+DO_TRAIN = True
+SAVE_TF = True
 
 WEIGHTS_FILE = 'weights/weights'
 TRAIN_DIR = '../data/data_split/train'
@@ -47,25 +47,34 @@ def get_right_label(labels):
   return labels.skip(CONTEXT).take(1)
 
 def build_ds(dir):
-  total_ds = None
-  for song_path in files_in(dir):
-    print(song_path)
+  total_ds = None #tf.data.Datset.from_tensor_slices(np.empty((WINDOW,80,3)))
+  print(total_ds)
+  for song_path in files_in(dir)[:3]:
+    #print(song_path)
     ds = tf.data.Dataset.from_generator(
       lambda: song_gen(song_path),
       (tf.float32, tf.uint8)
     )
     ds = ds.window(size=WINDOW, shift=1, drop_remainder=True)
     ds = ds.flat_map(lambda x,y: tf.data.Dataset.zip((x.batch(WINDOW), get_right_label(y))))
-    i = 0
-    for x,y in ds:
-      i += 1
-    print(f'\t{i} timesteps')
+
+    #i = 0
+    #print(len(ds))
+    #for x,y in ds:
+    #  i += 1
+    #print(f'\t{i} timesteps')
 
     if total_ds == None:
       total_ds = ds
     else:
-      total_ds.concatenate(ds)
+      total_ds = total_ds.concatenate(ds)
+
+  i = 0
+  for x,y in total_ds:
+    i += 1
+  print(f'[{i} total]')
   return total_ds
+
 
 if SAVE_TF:
   subprocess.run(["rm", "-rf", f"{TRAIN_TF_DIR}/*"])
