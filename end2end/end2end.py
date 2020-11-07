@@ -37,6 +37,7 @@ def song_gen(song_path):
   song_data = None
   with open(song_path, 'rb') as f:
     song_data = reduce2np(pickle.load(f))
+  print(f'\t{len(song_data)} charts')
   for chart_data in song_data:
     for time_step in chart_data:
       yield time_step
@@ -48,15 +49,17 @@ def get_right_label(labels):
 def build_ds(dir):
   total_ds = None
   for song_path in files_in(dir):
-    #print(song_path)
+    print(song_path)
     ds = tf.data.Dataset.from_generator(
       lambda: song_gen(song_path),
       (tf.float32, tf.uint8)
     )
     ds = ds.window(size=WINDOW, shift=1, drop_remainder=True)
     ds = ds.flat_map(lambda x,y: tf.data.Dataset.zip((x.batch(WINDOW), get_right_label(y))))
+    i = 0
     for x,y in ds:
-      pass
+      i += 1
+    print(f'\t{i} timesteps')
 
     if total_ds == None:
       total_ds = ds

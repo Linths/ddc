@@ -60,5 +60,5 @@ def reduce2np(data):
   select_channels([data], channels)
   charts = flatten_dataset_to_charts([data])
   result = [get_context_data(chart) for chart in charts if chart.get_coarse_difficulty() == 'Easy']
-  print(f'reduce2np: {timer()-start} sec')
+  print(f'\treduce2np: {timer()-start} sec')
   return result
