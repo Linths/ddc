@@ -70,16 +70,19 @@ def build_song_ds(song_path):
     #   total_ds = total_ds.concatenate(ds)
   
 
-  def build_ds(dir):
-    total_ds = tf.data.Datset.from_tensor_slices(dir)
-    total_ds = total_ds.flat_map(lambda x: build_song_ds(x))
-    i = 0
-    for x,y in total_ds:
-      i += 1
-    print(f'[{i} total]')
-  return total_ds
+def build_ds(dir):
+  #total_ds = tf.data.Datset.from_tensor_slices(dir)
+  all_ds = [build_song_ds(file) for file in files_in(dir)]
+  # total_ds = total_ds.flat_map(lambda x: build_song_ds(x))
+  # for ds in all_ds:
+  return
+  # i = 0
+  # for x,y in total_ds:
+  #   i += 1
+  # print(f'[{i} total]')
+  # return total_ds
 
-
+# def concat()
 
 if SAVE_TF:
   subprocess.run(["rm", "-rf", f"{TRAIN_TF_DIR}/*"])
