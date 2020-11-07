@@ -16,8 +16,8 @@ np.set_printoptions(precision=3)
 
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
-DO_TRAIN = True
-SAVE_TF = True
+DO_TRAIN = False #True
+SAVE_TF = False #True
 
 WEIGHTS_FILE = 'weights/weights'
 TRAIN_DIR = '../data/data_split/train'
