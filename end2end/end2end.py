@@ -1,6 +1,9 @@
 import tensorflow as tf
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, Conv3D, MaxPool2D, MaxPool3D, LSTM, LSTMCell, StackedRNNCells, RNN
 from tensorflow.keras import Model
+from keras import backend as K
+from tensorflow.python.framework import ops
+# from keras.losses import LossFunctionWrapper
 import numpy as np
 import pickle
 import gc
@@ -16,17 +19,17 @@ np.set_printoptions(precision=3)
 
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
-DO_TRAIN = False
+DO_TRAIN = True
 SAVE_TF = False
 
 WEIGHTS_FILE = 'weights/weights'
-TRAIN_DIR = '../data/data_split/train'
-TEST_DIR = '../data/data_split/test'
-TF_DIR = '../data/tf'
+TRAIN_DIR = 'data/data_split/train'
+TEST_DIR = 'data/data_split/test'
+TF_DIR = 'data/tf'
 TRAIN_TF_DIR = f'{TF_DIR}/train'
 TEST_TF_DIR = f'{TF_DIR}/test'
 
-EPOCHS = 5
+EPOCHS = 100
 CONTEXT = 7
 WINDOW = 2*CONTEXT+1
 BATCH_SIZE = 256
@@ -91,19 +94,39 @@ start = timer()
 train_ds_loaded = tf.data.experimental.load(TRAIN_TF_DIR,
     (tf.TensorSpec(shape=(WINDOW, 80, 3), dtype=tf.float32),
      tf.TensorSpec(shape=(), dtype=tf.uint8)))
-train_ds_loaded = train_ds_loaded.batch(BATCH_SIZE)
 end = timer()
-print(f'[Train] Batched in {end-start} sec.')
+print(f'[Train] Loaded in {end-start} sec.')
 print(len(train_ds_loaded))
 
 start = timer()
 test_ds_loaded = tf.data.experimental.load(TEST_TF_DIR,
     (tf.TensorSpec(shape=(WINDOW, 80, 3), dtype=tf.float32),
      tf.TensorSpec(shape=(), dtype=tf.uint8)))
-test_ds_loaded = test_ds_loaded.batch(BATCH_SIZE)
 end = timer()
-print(f'[Test] Batched in {end-start} sec.')
+print(f'[Test] Loaded in {end-start} sec.')
 print(len(test_ds_loaded))
+
+pos_train_ds_loaded = train_ds_loaded.filter(lambda feats, label: label != 0)
+neg_train_ds_loaded = train_ds_loaded.filter(lambda feats, label: label == 0)
+
+def ds_len(ds):
+  i = 0
+  for _ in ds:
+    i += 1
+  return i
+
+npos_train = ds_len(pos_train_ds_loaded)
+nneg_train = ds_len(neg_train_ds_loaded)
+rate_train = npos_train / (npos_train + nneg_train)
+print(f'[Train] {rate_train * 100}% positive rate. {npos_train} vs {nneg_train}')
+train_neg_shift = int(1/rate_train) * 256)
+print(train_neg_shift)
+neg_train_ds_loaded = neg_train_ds_loaded.window(size=1, shift=train_neg_shift).flat_map(lambda x,y: tf.data.Dataset.zip((x.batch(1), y.batch(1)))).unbatch()
+print(f'[Train] Picked only {ds_len(neg_train_ds_loaded)} NO_STEPs, using shift={train_neg_shift}')
+
+balanced_train = tf.data.experimental.sample_from_datasets([pos_train_ds_loaded, neg_train_ds_loaded], weights=[1/256, 255/256])
+balanced_train = balanced_train.batch(BATCH_SIZE)
+test_ds_loaded = test_ds_loaded.batch(BATCH_SIZE)
 
 # Model architecture
 class MyModel(Model):
@@ -131,6 +154,12 @@ class MyModel(Model):
 model = MyModel()
 
 # Model compile settings
+# class_weights = [0.03] + 255*[0.97] # maybe everything /256
+# ratio_hit = 0.0000000000001
+# class_weights = [ratio_hit] + 255*[1-ratio_hit] # maybe everything /256
+# class_weights = [.5] + 255*[.5 / 255]
+# class_weights = 256*[1]
+
 loss_object = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 optimizer = tf.keras.optimizers.Adam()
 train_loss = tf.keras.metrics.Mean(name='train_loss')
@@ -146,11 +175,14 @@ def train_step(images, labels):
     # behavior during training versus inference (e.g. Dropout).
     predictions = model(images, training=True)
     loss = loss_object(labels, predictions)
+    # weighted_logits = predictions * class_weights
+    # loss = loss_object(labels, weighted_logits)
   gradients = tape.gradient(loss, model.trainable_variables)
   optimizer.apply_gradients(zip(gradients, model.trainable_variables))
 
   train_loss(loss)
   train_accuracy(labels, predictions)
+  return predictions
 
 @tf.function
 def test_step(images, labels):
@@ -158,6 +190,8 @@ def test_step(images, labels):
   # behavior during training versus inference (e.g. Dropout).
   predictions = model(images, training=False)
   t_loss = loss_object(labels, predictions)
+  # weighted_logits = predictions * class_weights
+  # t_loss = loss_object(labels, weighted_logits)
   test_loss(t_loss)
   test_accuracy(labels, predictions)
   return predictions
@@ -175,7 +209,10 @@ def train(train_ds, test_ds):
     for feats, labels in train_ds:
       train_step(np.asarray(feats), np.asarray(labels))
     for feats, labels in test_ds:
-      test_step(feats, labels)
+      last_layer = test_step(feats, labels)
+      preds = np.argmax(last_layer, axis=1)
+      print(f'[test] steps@ {[i for i, step in enumerate(preds) if step == 0]}')
+      print([num2step(pred) for pred in preds])
 
     end = timer()
 
@@ -226,7 +263,8 @@ def test(test_ds, show_confmat=False):
 
 # Run the NN
 if DO_TRAIN:
-  train(train_ds_loaded, test_ds_loaded)
+  train(balanced_train, test_ds_loaded)
+  # train(train_ds_loaded, test_ds_loaded)
 else:
   predicted_steps = test(test_ds_loaded)
   print([i for i, step in enumerate(predicted_steps) if step != 0])
