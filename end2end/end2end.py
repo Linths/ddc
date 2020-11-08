@@ -23,9 +23,9 @@ DO_TRAIN = True
 SAVE_TF = False
 
 WEIGHTS_FILE = 'weights/weights'
-TRAIN_DIR = 'data/data_split/train'
-TEST_DIR = 'data/data_split/test'
-TF_DIR = 'data/tf'
+TRAIN_DIR = '../data/data_split/train'
+TEST_DIR = '../data/data_split/test'
+TF_DIR = '../data/tf'
 TRAIN_TF_DIR = f'{TF_DIR}/train'
 TEST_TF_DIR = f'{TF_DIR}/test'
 
@@ -42,7 +42,7 @@ def song_gen(song_path):
     song_data = reduce2np(pickle.load(f))
   print(f'\t{len(song_data)} charts')
   for chart_data in song_data[:1]:
-   print(f'\t{len(chart_data)} timesteps') 
+   print(f'\t{len(chart_data)} timesteps')
    for time_step in chart_data:
       yield time_step
   del song_data
@@ -57,7 +57,7 @@ def build_song_ds(song_path):
   )
   ds = ds.window(size=WINDOW, shift=1, drop_remainder=True)
   ds = ds.flat_map(lambda x,y: tf.data.Dataset.zip((x.batch(WINDOW), get_right_label(y))))
-  return ds  
+  return ds
 
 def build_ds(dir):
   all_ds = [build_song_ds(file) for file in files_in(dir)]
@@ -119,7 +119,7 @@ npos_train = ds_len(pos_train_ds_loaded)
 nneg_train = ds_len(neg_train_ds_loaded)
 rate_train = npos_train / (npos_train + nneg_train)
 print(f'[Train] {rate_train * 100}% positive rate. {npos_train} vs {nneg_train}')
-train_neg_shift = int(1/rate_train) * 256)
+train_neg_shift = int(1/rate_train * 256)
 print(train_neg_shift)
 neg_train_ds_loaded = neg_train_ds_loaded.window(size=1, shift=train_neg_shift).flat_map(lambda x,y: tf.data.Dataset.zip((x.batch(1), y.batch(1)))).unbatch()
 print(f'[Train] Picked only {ds_len(neg_train_ds_loaded)} NO_STEPs, using shift={train_neg_shift}')
@@ -226,7 +226,7 @@ def train(train_ds, test_ds):
     )
     model.save_weights(WEIGHTS_FILE+f'_epoch_{epoch}')
   model.save_weights(WEIGHTS_FILE)
-  
+
 def test(test_ds, show_confmat=False):
   print("Testing once")
   model.load_weights(WEIGHTS_FILE)
@@ -243,7 +243,7 @@ def test(test_ds, show_confmat=False):
     pred = np.argmax(last_layer, axis=1)
     # pred = np.argmax(last_layer, axis=1) + 1 # FIXME: now never predicts NO_STEP
     y_pred.extend(pred)
-  
+
   end = timer()
 
   print(
@@ -253,7 +253,7 @@ def test(test_ds, show_confmat=False):
   )
 
   if show_confmat:
-    confusion_mtx = tf.math.confusion_matrix(y_true, y_pred) 
+    confusion_mtx = tf.math.confusion_matrix(y_true, y_pred)
     plt.figure(figsize=(60, 48))
     sns.heatmap(confusion_mtx, annot=False, fmt='g')
     plt.xlabel('Prediction')
