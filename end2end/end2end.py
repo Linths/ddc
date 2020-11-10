@@ -109,12 +109,6 @@ print(len(test_ds_loaded))
 pos_train_ds_loaded = train_ds_loaded.filter(lambda feats, label: label != 0)
 neg_train_ds_loaded = train_ds_loaded.filter(lambda feats, label: label == 0)
 
-def ds_len(ds):
-  i = 0
-  for _ in ds:
-    i += 1
-  return i
-
 npos_train = ds_len(pos_train_ds_loaded)
 nneg_train = ds_len(neg_train_ds_loaded)
 rate_train = npos_train / (npos_train + nneg_train)

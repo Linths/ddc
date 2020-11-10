@@ -76,3 +76,9 @@ def reduce2np(data):
   result = [get_context_data(chart) for chart in charts if chart.get_coarse_difficulty() == 'Easy']
   print(f'\treduce2np: {timer()-start} sec')
   return result
+
+def ds_len(ds):
+  i = 0
+  for _ in ds:
+    i += 1
+  return i
