@@ -12,6 +12,7 @@ import seaborn as sns
 from timeit import default_timer as timer
 import subprocess
 from enum import Enum, auto
+import math
 
 from util import *
 from util2 import *
@@ -137,7 +138,11 @@ test_ds_loaded = test_ds_loaded.batch(BATCH_SIZE)
 train_ds_loaded = train_ds_loaded.batch(BATCH_SIZE)
 
 # === MODEL COMPILE SETTINGS ===
-class_weights = [0.015] + 255*[0.985] #/255]
+ratio_empty = 0.985
+class_weights = [1/ratio_empty] + (N_CLASSES-1)*[1/((1-ratio_empty)/(N_CLASSES-1))]
+mu = 0.15
+class_weights = [math.log(mu*x) for x in class_weights]
+
 # ratio_hit = 0.0000000000001
 # class_weights = [ratio_hit] + 255*[1-ratio_hit] # maybe everything /256
 # class_weights = [.5] + 255*[.5 / 255]
@@ -190,9 +195,9 @@ def pre_train_step(images, labels):
     # training=True is only needed if there are layers with different
     # behavior during training versus inference (e.g. Dropout).
     predictions = pre_model(images, training=True)
-    #loss = loss_object(labels, predictions)
-    weighted_logits = predictions * class_weights
-    loss = loss_object(labels, weighted_logits)
+    loss = loss_object(labels, predictions)
+    #weighted_logits = predictions * class_weights
+    #loss = loss_object(labels, weighted_logits)
   gradients = tape.gradient(loss, pre_model.trainable_variables)
   pre_optimizer.apply_gradients(zip(gradients, pre_model.trainable_variables))
 
@@ -378,8 +383,8 @@ def load_pretrained_weights(model):
 
 if RUN_MODE == RunMode.WITH_PRE_TRAIN:
   pre_model = PreTrainModel()
-  pre_train(train_ds_loaded, test_ds_loaded, epochs=5)
-  #pre_train(balanced_train, test_ds_loaded, epochs=5)
+  #pre_train(train_ds_loaded, test_ds_loaded, epochs=5)
+  pre_train(balanced_train, test_ds_loaded, epochs=5)
   model = ChoreographModel()
   load_pretrained_weights(model)
   train_after_pre(train_ds_loaded, test_ds_loaded, epochs=5)
