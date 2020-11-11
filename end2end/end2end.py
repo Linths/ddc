@@ -11,10 +11,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from timeit import default_timer as timer
 import subprocess
-from enum import Enum
+from enum import Enum, auto
 
 from util import *
 from util2 import *
+from models import *
 
 np.set_printoptions(precision=3)
 
@@ -136,7 +137,7 @@ test_ds_loaded = test_ds_loaded.batch(BATCH_SIZE)
 train_ds_loaded = train_ds_loaded.batch(BATCH_SIZE)
 
 # === MODEL COMPILE SETTINGS ===
-class_weights = [0.015] + 255*[0.985/256] # maybe everything /256
+class_weights = [0.015] + 255*[0.985/255]
 # ratio_hit = 0.0000000000001
 # class_weights = [ratio_hit] + 255*[1-ratio_hit] # maybe everything /256
 # class_weights = [.5] + 255*[.5 / 255]
@@ -144,8 +145,8 @@ class_weights = [0.015] + 255*[0.985/256] # maybe everything /256
 
 loss_object = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 pre_lr = 0.001
-cnn_lr = 0.0000001
-res_lr = 0.00001
+cnn_lr = 0.000001
+res_lr = 0.0001
 pre_optimizer = tf.keras.optimizers.Adam(learning_rate=pre_lr)
 cnn_optimizer = tf.keras.optimizers.Adam(learning_rate=cnn_lr)
 res_optimizer = tf.keras.optimizers.Adam(learning_rate=res_lr)
@@ -189,11 +190,11 @@ def pre_train_step(images, labels):
     # training=True is only needed if there are layers with different
     # behavior during training versus inference (e.g. Dropout).
     predictions = pre_model(images, training=True)
-    # loss = loss_object(labels, predictions)
+    #loss = loss_object(labels, predictions)
     weighted_logits = predictions * class_weights
     loss = loss_object(labels, weighted_logits)
   gradients = tape.gradient(loss, pre_model.trainable_variables)
-  optimizer.apply_gradients(zip(gradients, pre_model.trainable_variables))
+  pre_optimizer.apply_gradients(zip(gradients, pre_model.trainable_variables))
 
   train_loss(loss)
   train_accuracy(labels, predictions)
@@ -205,8 +206,8 @@ def pre_test_step(images, labels):
   # behavior during training versus inference (e.g. Dropout).
   predictions = pre_model(images, training=False)
   t_loss = loss_object(labels, predictions)
-  # weighted_logits = predictions * class_weights
-  # t_loss = loss_object(labels, weighted_logits)
+  #weighted_logits = predictions * class_weights
+  #t_loss = loss_object(labels, weighted_logits)
   test_loss(t_loss)
   test_accuracy(labels, predictions)
   return predictions
@@ -217,9 +218,9 @@ def train_after_pre_step(images, labels):
     # training=True is only needed if there are layers with different
     # behavior during training versus inference (e.g. Dropout).
     predictions = model(images, training=True)
-    # loss = loss_object(labels, predictions)
-    weighted_logits = predictions * class_weights
-    loss = loss_object(labels, weighted_logits)
+    loss = loss_object(labels, predictions)
+    #weighted_logits = predictions * class_weights
+    #loss = loss_object(labels, weighted_logits)
   vars = model.trainable_variables
   cnn_vars = vars[-4:]
   res_vars = vars[:-4]
@@ -377,7 +378,8 @@ def load_pretrained_weights(model):
 
 if RUN_MODE == RunMode.WITH_PRE_TRAIN:
   pre_model = PreTrainModel()
-  pre_train(balanced_train, test_ds_loaded, epochs=5)
+  pre_train(train_ds_loaded, test_ds_loaded, epochs=5)
+  #pre_train(balanced_train, test_ds_loaded, epochs=5)
   model = ChoreographModel()
   load_pretrained_weights(model)
   train_after_pre(train_ds_loaded, test_ds_loaded, epochs=5)

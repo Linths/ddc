@@ -2,6 +2,8 @@
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, Conv3D, MaxPool2D, MaxPool3D, LSTM, LSTMCell, StackedRNNCells, RNN
 from tensorflow.keras import Model
 
+N_CLASSES = 256
+
 class ChoreographModel(Model):
   def __init__(self):
     super(ChoreographModel, self).__init__()
