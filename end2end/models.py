@@ -1,6 +1,7 @@
 # Model architecture
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, Conv3D, MaxPool2D, MaxPool3D, LSTM, LSTMCell, StackedRNNCells, RNN
 from tensorflow.keras import Model
+import tensorflow as tf
 
 N_CLASSES = 256
 

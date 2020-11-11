@@ -137,7 +137,7 @@ test_ds_loaded = test_ds_loaded.batch(BATCH_SIZE)
 train_ds_loaded = train_ds_loaded.batch(BATCH_SIZE)
 
 # === MODEL COMPILE SETTINGS ===
-class_weights = [0.015] + 255*[0.985/255]
+class_weights = [0.015] + 255*[0.985] #/255]
 # ratio_hit = 0.0000000000001
 # class_weights = [ratio_hit] + 255*[1-ratio_hit] # maybe everything /256
 # class_weights = [.5] + 255*[.5 / 255]
