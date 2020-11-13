@@ -1,4 +1,5 @@
 from enum import Enum, auto
+import datetime
 
 class RunMode(Enum):
   TRAIN_BASIC = auto()
@@ -8,8 +9,9 @@ class RunMode(Enum):
 RUN_MODE = RunMode.WITH_PRE_TRAIN
 BUILD_DATASET = False
 
-WEIGHTS_FILE = 'weights/weights'
-PRE_WEIGHTS_FILE = 'pre-weights/pre-weights'
+timestamp = datetime.datetime.now().replace(microsecond=0).isoformat()
+WEIGHTS_FILE = f'weights/{timestamp}/weights'
+PRE_WEIGHTS_FILE = f'pre-weights/{timestamp}/pre-weights'
 
 DATA_DIR = '../data'
 TRAIN_DIR = f'{DATA_DIR}/data_split/train'

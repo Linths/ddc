@@ -6,6 +6,7 @@ from timeit import default_timer as timer
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import subprocess
 
 from util2 import num2step
 from settings import N_CLASSES
@@ -110,6 +111,9 @@ def run_total(model, test_ds, test_step_fn,
               train_ds=None, train_step_fn=None,
               show_confmat=False):
   print(f"Train and test for {epochs} epochs")
+
+  if weights_file != None:
+    subprocess.run(["cp", "settings.py", weights_file])
 
   for epoch in range(epochs):
     start = timer()
