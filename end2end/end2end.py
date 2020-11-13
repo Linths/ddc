@@ -31,7 +31,7 @@ train_ds = train_ds.batch(BATCH_SIZE)
 
 # === MODEL COMPILE SETTINGS ===
 ratio_empty = 0.985
-mu = 0.15
+mu = 3 #0.15
 class_weights = [1/ratio_empty] + (N_CLASSES-1)*[1/((1-ratio_empty)/(N_CLASSES-1))]
 class_weights = [math.log(mu*x) for x in class_weights]
 
@@ -82,7 +82,7 @@ if RUN_MODE == RunMode.WITH_PRE_TRAIN:
             epochs=EPOCHS,
             metrics=all_metrics,
             weights_file=PRE_WEIGHTS_FILE)
-  
+
   model = ChoreographModel()
   load_pretrained_weights(
             pretrain_model=pre_model,
