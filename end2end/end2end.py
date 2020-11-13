@@ -71,8 +71,9 @@ if RUN_MODE == RunMode.WITH_PRE_TRAIN:
   def pretest_step(x,y,m):
     return run_step(x, y, m,
             is_train=False,
-            is_weighted=False,
+            is_weighted=True,
             is_finetuning=False,
+            class_weights=class_weights,
             **test_kwargs)
   run_total(pre_model,
             train_ds=balanced_train_ds,
@@ -92,8 +93,9 @@ if RUN_MODE == RunMode.WITH_PRE_TRAIN:
   def finetrain_step(x,y,m):
     return run_step(x, y, m,
             is_train=True,
-            is_weighted=False,
+            is_weighted=True,
             is_finetuning=True,
+            class_weights=class_weights,
             optimizer=res_optimizer,
             optimizer_pretrained_layers=cnn_optimizer,
             **train_kwargs)
@@ -101,8 +103,9 @@ if RUN_MODE == RunMode.WITH_PRE_TRAIN:
   def finetest_step(x,y,m):
     return run_step(x, y, m,
             is_train=False,
-            is_weighted=False,
+            is_weighted=True,
             is_finetuning=True,
+            class_weights=class_weights,
             **test_kwargs)
   run_total(model,
             train_ds=train_ds,

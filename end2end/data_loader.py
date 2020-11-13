@@ -76,6 +76,6 @@ def undersample(ds):
   neg_ds = neg_ds.window(size=1, shift=neg_shift).flat_map(lambda x,y: tf.data.Dataset.zip((x.batch(1), y.batch(1)))).unbatch()
   print(f'[Train] Picked only {ds_len(neg_ds)} NO_STEPs, using shift={neg_shift}')
 
-  balanced_ds = tf.data.experimental.sample_from_datasets([pos_ds, neg_ds], weights=[1/N_CLASSES, (N_CLASSES-1)/N_CLASSES])
+  balanced_ds = tf.data.experimental.sample_from_datasets([pos_ds, neg_ds], weights=[(N_CLASSES-1)/N_CLASSES, 1/N_CLASSES])
   balanced_ds = balanced_ds.batch(BATCH_SIZE)
   return balanced_ds
