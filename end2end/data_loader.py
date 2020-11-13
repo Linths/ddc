@@ -59,8 +59,7 @@ def load_dataset(dir, name=None):
       (tf.TensorSpec(shape=(WINDOW, 80, 3), dtype=tf.float32),
       tf.TensorSpec(shape=(), dtype=tf.uint8)))
   end = timer()
-  print(f'{prefix_print(name)}Loaded in {end-start} sec.')
-  print(len(ds))
+  print(f'{prefix_print(name)}Loaded {len(ds)} in {end-start} sec.')
   return ds
 
 def undersample(ds):
@@ -70,12 +69,13 @@ def undersample(ds):
   n_pos = ds_len(pos_ds)
   n_neg = ds_len(neg_ds)
   rate_pos = n_pos / (n_pos + n_neg)
-  print(f'[Train] {rate_pos * 100}% positive rate. {n_pos} vs {n_neg}')
-  neg_shift = int(1/rate_pos * N_CLASSES)
-  print(neg_shift)
+  print(f'[Undersample] {rate_pos * 100}% positive rate. {n_pos} vs {n_neg}')
+  n_neg_allowed = n_pos/(N_CLASSES-1)
+  neg_shift = int(n_neg / n_neg_allowed)
   neg_ds = neg_ds.window(size=1, shift=neg_shift).flat_map(lambda x,y: tf.data.Dataset.zip((x.batch(1), y.batch(1)))).unbatch()
-  print(f'[Train] Picked only {ds_len(neg_ds)} NO_STEPs, using shift={neg_shift}')
+  print(f'[Undersample] Picked only {ds_len(neg_ds)} NO_STEPs out of {n_neg}, using shift={neg_shift}')
 
-  balanced_ds = tf.data.experimental.sample_from_datasets([pos_ds, neg_ds], weights=[(N_CLASSES-1)/N_CLASSES, 1/N_CLASSES])
+  balanced_ds = tf.data.experimental.sample_from_datasets([pos_ds, neg_ds], weights=[(N_CLASSES-1)/N_CLASSES, 1/N_CLASSES], seed=1)
   balanced_ds = balanced_ds.batch(BATCH_SIZE)
   return balanced_ds
+  
