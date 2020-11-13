@@ -57,20 +57,27 @@ def run_step(feats, labels, model,
             class_weights=None, optimizer=None,
             optimizer_pretrained_layers=None):
 
-  def predict_step():
-    predictions = model(feats, training=is_train)
-    if not is_weighted:
-      loss = loss_object(labels, predictions)
-    else:
-      assert class_weights != None
-      weighted_logits = predictions * class_weights
-      loss = loss_object(labels, weighted_logits)
-    return predictions, loss
+  # def predict_step():
+  #   predictions = model(feats, training=is_train)
+  #   if not is_weighted:
+  #     loss = loss_object(labels, predictions)
+  #   else:
+  #     assert class_weights != None
+  #     weighted_logits = predictions * class_weights
+  #     loss = loss_object(labels, weighted_logits)
+  #   return predictions, loss
 
   if is_train:
     assert optimizer != None
     with tf.GradientTape() as tape:
-      predictions, loss = predict_step()
+      # predictions, loss = predict_step()
+      predictions = model(feats, training=is_train)
+      if not is_weighted:
+        loss = loss_object(labels, predictions)
+      else:
+        assert class_weights != None
+        weighted_logits = predictions * class_weights
+        loss = loss_object(labels, weighted_logits)
     variables = model.trainable_variables
 
     if not is_finetuning:
@@ -90,7 +97,14 @@ def run_step(feats, labels, model,
       optimizer.apply_gradients(zip(other_grads, other_vars))
   
   else:
-    predictions, loss = predict_step()
+    # predictions, loss = predict_step()
+    predictions = model(feats, training=is_train)
+    if not is_weighted:
+      loss = loss_object(labels, predictions)
+    else:
+      assert class_weights != None
+      weighted_logits = predictions * class_weights
+      loss = loss_object(labels, weighted_logits)
   
   loss_metrics(loss)
   accuracy_metrics(labels, predictions)
@@ -165,3 +179,4 @@ def _print_prediction_summary(preds):
   print(f'0s @ {[i for i, step in enumerate(preds) if step == 0]}')
   print(f'xs @ {[i for i, step in enumerate(preds) if step != 0]}')
   print([num2step(pred) for pred in preds])
+  
