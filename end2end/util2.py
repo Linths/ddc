@@ -4,7 +4,7 @@ import numpy as np
 import tensorflow as tf
 from timeit import default_timer as timer
 
-from util import *
+from util import load_id_dict, stride_csv_arg_list, select_channels, flatten_dataset_to_charts
 
 np.set_printoptions(precision=3)
 
@@ -30,7 +30,7 @@ def step2num(step_string):
     bitshift = (3-i)*2
     result += tile_state << bitshift
   return result
-empty_step = step2num('0000')
+EMPTY_STEP = step2num('0000')
 
 # Tests
 assert step2num('3002') == 194
@@ -66,7 +66,7 @@ def get_context_data(chart):
 def get_context_data_at(chart, index, onsets_steps):
   feats, _, _ = chart.get_example(frame_idx=index, dtype=np_dtype, time_context_radius=0, diff_coarse_to_id=diff_coarse_to_id)
   feats = feats[0]
-  label = onsets_steps.get(index, empty_step)
+  label = onsets_steps.get(index, EMPTY_STEP)
   return (feats, label)
 
 def reduce2np(data):
@@ -82,3 +82,6 @@ def ds_len(ds):
   for _ in ds:
     i += 1
   return i
+
+def prefix_print(print_name):
+  return f"[{print_name}] " if print_name != None else ""

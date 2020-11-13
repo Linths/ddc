@@ -2,8 +2,13 @@
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, Conv3D, MaxPool2D, MaxPool3D, LSTM, LSTMCell, StackedRNNCells, RNN
 from tensorflow.keras import Model
 import tensorflow as tf
+from timeit import default_timer as timer
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-N_CLASSES = 256
+from util2 import num2step
+from settings import N_CLASSES
 
 class ChoreographModel(Model):
   def __init__(self):
@@ -43,3 +48,116 @@ class PreTrainModel(Model):
     x = self.max2(x)
     x = self.pre_flatten(x)
     return self.pre_fc(x)
+
+
+def run_step(feats, labels, model,
+            is_train, is_weighted, is_finetuning, 
+            loss_object, loss_metrics, accuracy_metrics,
+            class_weights=None, optimizer=None,
+            optimizer_pretrained_layers=None):
+
+  def predict_step():
+    predictions = model(feats, training=is_train)
+    if not is_weighted:
+      loss = loss_object(labels, predictions)
+    else:
+      assert class_weights != None
+      weighted_logits = predictions * class_weights
+      loss = loss_object(labels, weighted_logits)
+    return predictions, loss
+
+  if is_train:
+    assert optimizer != None
+    with tf.GradientTape() as tape:
+      predictions, loss = predict_step()
+    variables = model.trainable_variables
+
+    if not is_finetuning:
+      gradients = tape.gradient(loss, variables)
+      optimizer.apply_gradients(zip(gradients, variables))
+    else:
+      assert optimizer_pretrained_layers != None
+      n = 4 # n_pretrained_layers
+      pretrain_vars = variables[-n:]
+      other_vars = variables[:-n]
+
+      gradients = tape.gradient(loss, other_vars + pretrain_vars)
+      pretrain_grads = gradients[-n:] # cnn layers gradients
+      other_grads = gradients[:-n] # other gradients
+      
+      optimizer_pretrained_layers.apply_gradients(zip(pretrain_grads, pretrain_vars))
+      optimizer.apply_gradients(zip(other_grads, other_vars))
+  
+  else:
+    predictions, loss = predict_step()
+  
+  loss_metrics(loss)
+  accuracy_metrics(labels, predictions)
+  return predictions
+
+
+def load_pretrained_weights(pretrain_model, finetune_model, preweights_file):
+  pretrain_model.load_weights(preweights_file)
+  finetune_model.conv1 = pretrain_model.conv1
+  finetune_model.max1 = pretrain_model.max1
+  finetune_model.conv2 = pretrain_model.conv2
+  finetune_model.max2 = pretrain_model.max2
+  assert finetune_model.variables != []
+
+
+def run_total(model, test_ds, test_step_fn,
+              epochs, metrics, weights_file=None,
+              train_ds=None, train_step_fn=None,
+              show_confmat=False):
+  print(f"Train and test for {epochs} epochs")
+
+  for epoch in range(epochs):
+    start = timer()
+    for metric in metrics:
+      metric.reset_states()
+    y_true = []
+    y_pred = []
+    
+    if train_ds != None and train_step_fn != None:
+      for feats, labels in train_ds:
+        train_step_fn(feats, labels, model)
+    
+    for feats, labels in test_ds:
+      last_layer = test_step_fn(feats, labels, model)
+      preds = np.argmax(last_layer, axis=1)
+      _print_prediction_summary(preds)
+      if show_confmat:
+        y_true.extend(labels)
+        y_pred.extend(preds)
+
+    end = timer()
+    _print_epoch_summary(epoch, metrics, start, end)
+
+    if weights_file != None:
+      model.save_weights(weights_file+f'_epoch_{epoch}')
+  if weights_file != None:
+    model.save_weights(weights_file)
+  
+  if show_confmat:
+    _show_confmat(y_true, y_pred)
+
+
+def _show_confmat(y_true, y_pred):
+  confusion_mtx = tf.math.confusion_matrix(y_true, y_pred)
+  plt.figure(figsize=(60, 48))
+  sns.heatmap(confusion_mtx, annot=False, fmt='g')
+  plt.xlabel('Prediction')
+  plt.ylabel('Label')
+  plt.show() # TODO plt.savefig
+
+def _print_epoch_summary(epoch, metrics, start, end):
+  text = f'Epoch {epoch + 1}, '
+  for metric in metrics:
+    text += f'{metric.name}: {metric.result()}, '
+  text += f'time: {end - start}s'
+  print(text)
+
+def _print_prediction_summary(preds):
+  print(f'0s @ {[i for i, step in enumerate(preds) if step == 0]}')
+  print(f'xs @ {[i for i, step in enumerate(preds) if step != 0]}')
+  print([num2step(pred) for pred in preds])

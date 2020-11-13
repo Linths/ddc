@@ -7,7 +7,7 @@ import shutil
 import os
 import pickle
 
-from util2 import num2step
+from util2 import num2step, EMPTY_STEP
 
 _DIFFS = ['Beginner', 'Easy', 'Medium', 'Hard', 'Challenge']
 _DIFF_TO_COARSE_FINE_AND_THRESHOLD = {
@@ -93,7 +93,7 @@ def create_chart_dir(
     max_subdiv = max(time_to_step.keys())
     if max_subdiv % _SUBDIV != 0:
       max_subdiv += _SUBDIV - (max_subdiv % _SUBDIV)
-    full_steps = [time_to_step.get(i, '0000') for i in range(max_subdiv)]
+    full_steps = [time_to_step.get(i, EMPTY_STEP) for i in range(max_subdiv)]
     measures = [full_steps[i:i+_SUBDIV] for i in range(0, max_subdiv, _SUBDIV)]
     measures_txt = '\n,\n'.join(['\n'.join(measure) for measure in measures])
     chart_txt = _CHART_TEMPL.format(
