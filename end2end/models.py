@@ -152,7 +152,7 @@ def run_total(model, test_ds, test_step_fn,
     _print_epoch_summary(epoch, metrics, start, end)
 
     if weights_file != None:
-      model.save_weights(weights_file+f'_epoch_{epoch}')
+      model.save_weights(weights_file + _epoch_file_postfix(epoch, metrics, start, end))
   if weights_file != None:
     model.save_weights(weights_file)
   
@@ -171,12 +171,18 @@ def _show_confmat(y_true, y_pred):
 def _print_epoch_summary(epoch, metrics, start, end):
   text = f'Epoch {epoch + 1}, '
   for metric in metrics:
-    text += f'{metric.name}: {metric.result()}, '
+    text += f'{metric.name}: {metric.result():.3f}, '
   text += f'time: {end - start}s'
   print(text)
+
+def _epoch_file_postfix(epoch, metrics, start, end):
+  text = f'epoch_{epoch + 1}-'
+  for metric in metrics:
+    text += f'_{metric.name}-{metric.result():.3f}, '
+  text += f'time_{(end - start):.3f}s'
+  return text
 
 def _print_prediction_summary(preds):
   print(f'0s @ {[i for i, step in enumerate(preds) if step == 0]}')
   print(f'xs @ {[i for i, step in enumerate(preds) if step != 0]}')
   print([num2step(pred) for pred in preds])
-  
