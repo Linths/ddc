@@ -28,7 +28,7 @@ test_ds = load_dataset(TEST_TF_DIR, name='test')
 
 if BUILD_BALANCED_DATASET:
   start = timer()
-  balanced_train_ds = stratified_sample(train_ds)
+  balanced_train_ds = stratified_sample(train_ds, class_size=200)
   tf.data.experimental.save(balanced_train_ds, BALANCED_TRAIN_TF_DIR)
   end = timer()
   print(f'Balancing train dataset took {end-start}s')
