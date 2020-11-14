@@ -33,7 +33,7 @@ train_ds = train_ds.batch(BATCH_SIZE)
 ratio_empty = 0.985
 mu = 3 #0.15
 class_weights = [1/ratio_empty] + (N_CLASSES-1)*[1/((1-ratio_empty)/(N_CLASSES-1))]
-class_weights = [math.log(mu*x) for x in class_weights]
+#class_weights = [math.log(mu*x) for x in class_weights]
 
 loss_object = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 
