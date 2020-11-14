@@ -21,8 +21,9 @@ TF_DIR = f'{DATA_DIR}/tf'
 TRAIN_TF_DIR = f'{TF_DIR}/train'
 TEST_TF_DIR = f'{TF_DIR}/test'
 BALANCED_TRAIN_TF_DIR = f'{TF_DIR}/balanced-train'
+SPLIT_TRAIN_TF_DIR = f'{TF_DIR}/split-train'
 
-EPOCHS = 10
+EPOCHS = 100
 CONTEXT = 7
 WINDOW = 2*CONTEXT+1
 BATCH_SIZE = 256

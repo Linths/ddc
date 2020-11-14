@@ -6,7 +6,7 @@ import numpy as np
 
 from util import *
 from util2 import reduce2np, files_in, ds_len, prefix_print, num2step
-from settings import CONTEXT, WINDOW, N_CLASSES, BATCH_SIZE
+from settings import CONTEXT, WINDOW, N_CLASSES, BATCH_SIZE, SPLIT_TRAIN_TF_DIR
 
 # Loading data
 def __song_gen(song_path):
@@ -101,9 +101,11 @@ def oversample(ds):
 def _split_classes(ds):
   class_dss = [ds.filter(lambda feats, label: label == i) for i in range(N_CLASSES)]
   print(class_dss)
-  class_counts = [ds_len(ds) for ds in class_dss]
+  class_counts = [ds_len(class_ds) for class_ds in class_dss]
   print(class_counts)
   print([(num2step(x),y) for x,y in enumerate(class_counts) if y != 0])
+  for i,class_ds in enumerate(class_dss):
+    tf.data.experimental.save(class_ds, f'{SPLIT_TRAIN_TF_DIR}/i')
   return class_dss, class_counts
 
 def stratified_sample(input_ds, class_size=200):
