@@ -78,4 +78,21 @@ def undersample(ds):
   balanced_ds = tf.data.experimental.sample_from_datasets([pos_ds, neg_ds], weights=[(N_CLASSES-1)/N_CLASSES, 1/N_CLASSES], seed=1)
   balanced_ds = balanced_ds.batch(BATCH_SIZE)
   return balanced_ds
-  
+
+def oversample(ds):
+  pos_ds = ds.filter(lambda feats, label: label != 0)
+  neg_ds = ds.filter(lambda feats, label: label == 0)
+
+  n_pos = ds_len(pos_ds)
+  n_neg = ds_len(neg_ds)
+  rate_pos = n_pos / (n_pos + n_neg)
+  print(f'[Undersample] {rate_pos * 100}% positive rate. {n_pos} vs {n_neg}')
+  n_pos_desired = n_neg * (N_CLASSES-1)
+  print(n_pos_desired / n_pos)
+  repeat_count = int(n_pos_desired / n_pos)
+  print(f'{n_pos_desired} pos desired, repeating pos ({n_pos}) {repeat_count} times')
+  pos_ds = pos_ds.repeat(repeat_count)
+
+  balanced_ds = tf.data.experimental.sample_from_datasets([pos_ds, neg_ds], weights=[(N_CLASSES-1)/N_CLASSES, 1/N_CLASSES], seed=1)
+  balanced_ds = balanced_ds.batch(BATCH_SIZE)
+  return balanced_ds
