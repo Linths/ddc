@@ -2,9 +2,10 @@ import tensorflow as tf
 import pickle
 from timeit import default_timer as timer
 import subprocess
+import numpy as np
 
 from util import *
-from util2 import reduce2np, files_in, ds_len, prefix_print
+from util2 import reduce2np, files_in, ds_len, prefix_print, num2step
 from settings import CONTEXT, WINDOW, N_CLASSES, BATCH_SIZE
 
 # Loading data
@@ -95,4 +96,45 @@ def oversample(ds):
 
   balanced_ds = tf.data.experimental.sample_from_datasets([pos_ds, neg_ds], weights=[(N_CLASSES-1)/N_CLASSES, 1/N_CLASSES], seed=1)
   balanced_ds = balanced_ds.batch(BATCH_SIZE)
+  return balanced_ds
+
+def _split_classes(ds):
+  class_dss = [ds.filter(lambda feats, label: label == i) for i in range(N_CLASSES)]
+  print(class_dss)
+  class_counts = [ds_len(ds) for ds in class_dss]
+  print(class_counts)
+  print([(num2step(x),y) for x,y in enumerate(class_counts) if y != 0])
+  return class_dss, class_counts
+
+def stratified_sample(input_ds, class_size=200):
+  start = timer()
+  class_dss, class_counts = _split_classes(input_ds)
+  end = timer()
+  print(f'Class splitting took {(end-start):.3f}s')
+
+  n_empty = class_counts[0]
+  other_counts = class_counts[1:]
+  n_other = sum(other_counts)
+  print(other_counts)
+  popular_other = np.argmax(other_counts) + 1 
+  n_popular_other = max(other_counts)
+  # class_size = n_popular_other
+  print(f'{n_empty} empties, {n_other} others')
+  print(f'\"{num2step(popular_other)}\" is the most popular non-empty, appears {n_popular_other} times.')
+
+  print(f'Converting every class to have size {class_size}')
+  balanced_class_dss = []
+  for i,ds in enumerate(class_dss):
+    print(f'Label {i} with original count {class_counts[i]}')
+    start = timer()
+    if class_counts[i] == 0:
+      print('Skip repeating due to no samples')
+      balanced_class_ds = ds
+    else:
+      balanced_class_ds = ds.repeat().take(class_size)
+      # print(ds_len(balanced_class_ds)) # Commented to save redundant iterations
+    end = timer()
+    print(f'-> took {(end-start):.3f}s')
+    balanced_class_dss.append(balanced_class_ds)
+  balanced_ds = tf.data.experimental.sample_from_datasets(balanced_class_dss, seed=1)
   return balanced_ds

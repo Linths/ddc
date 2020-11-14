@@ -12,22 +12,34 @@ import math
 from util import *
 from util2 import num2step
 from models import ChoreographModel, PreTrainModel, run_step, run_total, load_pretrained_weights
-from settings import RunMode, RUN_MODE, BUILD_DATASET, WEIGHTS_FILE, PRE_WEIGHTS_FILE, DATA_DIR, TRAIN_DIR, TEST_DIR, TF_DIR, TRAIN_TF_DIR, TEST_TF_DIR, EPOCHS, CONTEXT, WINDOW, BATCH_SIZE, N_CLASSES
-from data_loader import build_dataset, load_dataset, undersample
+from settings import RunMode, RUN_MODE, BUILD_DATASET, BUILD_BALANCED_DATASET, WEIGHTS_FILE, PRE_WEIGHTS_FILE, DATA_DIR, TRAIN_DIR, TEST_DIR, TF_DIR, TRAIN_TF_DIR, TEST_TF_DIR, BALANCED_TRAIN_TF_DIR, EPOCHS, CONTEXT, WINDOW, BATCH_SIZE, N_CLASSES
+from data_loader import build_dataset, load_dataset, undersample, stratified_sample
 
 np.set_printoptions(precision=3)
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
 if BUILD_DATASET:
-  subprocess.run(["du", "-h", TF_DIR])
   build_dataset(load_dir=TRAIN_DIR, save_dir=TRAIN_TF_DIR, name='train')
   build_dataset(load_dir=TEST_DIR, save_dir=TEST_TF_DIR, name='test')
+  subprocess.run(["du", "-h", TF_DIR])
 
 train_ds = load_dataset(TRAIN_TF_DIR, name='train')
 test_ds = load_dataset(TEST_TF_DIR, name='test')
-balanced_train_ds = undersample(train_ds)
-test_ds = test_ds.batch(BATCH_SIZE)
+
+if BUILD_BALANCED_DATASET:
+  start = timer()
+  balanced_train_ds = stratified_sample(train_ds)
+  tf.data.experimental.save(balanced_train_ds, BALANCED_TRAIN_TF_DIR)
+  end = timer()
+  print(f'Balancing train dataset took {end-start}s')
+  subprocess.run(["du", "-h", BALANCED_TRAIN_TF_DIR])
+else:
+  balanced_train_ds = load_dataset(BALANCED_TRAIN_TF_DIR, name='balanced-train')
+
 train_ds = train_ds.batch(BATCH_SIZE)
+test_ds = test_ds.batch(BATCH_SIZE)
+balanced_train_ds = balanced_train_ds.batch(BATCH_SIZE)
+
 
 # === MODEL COMPILE SETTINGS ===
 ratio_empty = 0.985
@@ -51,9 +63,10 @@ test_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(name='test_accuracy')
 all_metrics = [train_loss, train_accuracy, test_loss, test_accuracy]
 test_metrics = [test_accuracy]
 
-train_kwargs = {'loss_object': loss_object,
-  'loss_metrics': train_loss, 'accuracy_metrics': train_accuracy}
-test_kwargs = {'loss_object': loss_object,
+train_kwargs = {'is_train': True, 'loss_object': loss_object,
+  'loss_metrics': train_loss, 'accuracy_metrics': train_accuracy,
+  'class_weights': class_weights}
+test_kwargs = {'is_train': False, 'is_weighted': False, 'loss_object': loss_object,
   'loss_metrics': test_loss, 'accuracy_metrics': test_accuracy}
 
 if RUN_MODE == RunMode.WITH_PRE_TRAIN:
@@ -61,19 +74,14 @@ if RUN_MODE == RunMode.WITH_PRE_TRAIN:
   @tf.function
   def pretrain_step(x,y,m):
       return run_step(x, y, m,
-            is_train=True,
-            is_weighted=True,
+            is_weighted=False,
             is_finetuning=False,
-            class_weights=class_weights,
             optimizer=pre_optimizer,
             **train_kwargs)
   @tf.function
   def pretest_step(x,y,m):
     return run_step(x, y, m,
-            is_train=False,
-            is_weighted=True,
             is_finetuning=False,
-            class_weights=class_weights,
             **test_kwargs)
   run_total(pre_model,
             train_ds=balanced_train_ds,
@@ -92,20 +100,15 @@ if RUN_MODE == RunMode.WITH_PRE_TRAIN:
   @tf.function
   def finetrain_step(x,y,m):
     return run_step(x, y, m,
-            is_train=True,
-            is_weighted=True,
+            is_weighted=False,
             is_finetuning=True,
-            class_weights=class_weights,
             optimizer=res_optimizer,
             optimizer_pretrained_layers=cnn_optimizer,
             **train_kwargs)
   @tf.function
   def finetest_step(x,y,m):
     return run_step(x, y, m,
-            is_train=False,
-            is_weighted=True,
             is_finetuning=True,
-            class_weights=class_weights,
             **test_kwargs)
   run_total(model,
             train_ds=train_ds,
