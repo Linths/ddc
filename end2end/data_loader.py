@@ -99,20 +99,34 @@ def oversample(ds):
   return balanced_ds
 
 def _split_classes(ds):
+  start = timer()
   class_dss = [ds.filter(lambda feats, label: label == i) for i in range(N_CLASSES)]
-  print(class_dss)
-  class_counts = [ds_len(class_ds) for class_ds in class_dss]
-  print(class_counts)
-  print([(num2step(x),y) for x,y in enumerate(class_counts) if y != 0])
-  for i,class_ds in enumerate(class_dss):
+  end = timer()
+  print(f'Filtering each label took {(end-start):.3f}s')
+  
+  start_all = timer()
+  class_counts = []
+  for i, class_ds in enumerate(class_dss):
+    start = timer()
+    print(f'Counting for label {i}')
+    count = ds_len(class_ds)
+    class_counts.append(count)
+    print(f'\tSaving dataset of size {count}')
     tf.data.experimental.save(class_ds, f'{SPLIT_TRAIN_TF_DIR}/i')
+    end = timer()
+    print(f'\tCounting & saving took {(end-start):.3f}s')
+  print(class_counts)
+  
+  end_all = timer()
+  print(f'Total counting & saving took {(end_all-start_all):.3f}s')
+  print([(num2step(x),y) for x,y in enumerate(class_counts) if y != 0])
   return class_dss, class_counts
 
 def stratified_sample(input_ds, class_size=200):
   start = timer()
   class_dss, class_counts = _split_classes(input_ds)
   end = timer()
-  print(f'Class splitting took {(end-start):.3f}s')
+  print(f'In total, class splitting took {(end-start):.3f}s')
 
   n_empty = class_counts[0]
   other_counts = class_counts[1:]
