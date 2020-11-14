@@ -8,6 +8,7 @@ class RunMode(Enum):
 
 RUN_MODE = RunMode.WITH_PRE_TRAIN
 BUILD_DATASET = False
+BUILD_BALANCED_DATASET = True
 
 timestamp = datetime.datetime.now().replace(microsecond=0).strftime('%Y-%m-%d %H_%M_%S')
 WEIGHTS_FILE = f'weights/{timestamp}/weights'
@@ -19,6 +20,7 @@ TEST_DIR = f'{DATA_DIR}/data_split/test'
 TF_DIR = f'{DATA_DIR}/tf'
 TRAIN_TF_DIR = f'{TF_DIR}/train'
 TEST_TF_DIR = f'{TF_DIR}/test'
+BALANCED_TRAIN_TF_DIR = f'{TF_DIR}/balanced-train'
 
 EPOCHS = 10
 CONTEXT = 7

@@ -1,6 +1,7 @@
 # Model architecture
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, Conv3D, MaxPool2D, MaxPool3D, LSTM, LSTMCell, StackedRNNCells, RNN
 from tensorflow.keras import Model
+from tensorflow.keras.initializers import GlorotUniform
 import tensorflow as tf
 from timeit import default_timer as timer
 import numpy as np
@@ -14,9 +15,9 @@ from settings import N_CLASSES
 class ChoreographModel(Model):
   def __init__(self):
     super(ChoreographModel, self).__init__()
-    self.conv1 = Conv2D(filters=10, kernel_size=(7,3), strides=(1,1), activation='relu', name='conv1')
+    self.conv1 = Conv2D(filters=10, kernel_size=(7,3), strides=(1,1), kernel_initializer=GlorotUniform(seed=1), activation='relu', name='conv1')
     self.max1 = MaxPool2D(pool_size=(1,3), strides=(1,3), name='max1')
-    self.conv2 = Conv2D(filters=20, kernel_size=(3,3), strides=(1,1), activation='relu', name='conv2')
+    self.conv2 = Conv2D(filters=20, kernel_size=(3,3), strides=(1,1), kernel_initializer=GlorotUniform(seed=1), activation='relu', name='conv2')
     self.max2 = MaxPool2D(pool_size=(1,3), strides=(1,3), name='max2')
     n_audiofeats = 8 * 20
     self.flatten = lambda x: tf.reshape(x, [x.shape[0], 7, n_audiofeats])
@@ -35,9 +36,9 @@ class ChoreographModel(Model):
 class PreTrainModel(Model):
   def __init__(self):
     super(PreTrainModel, self).__init__()
-    self.conv1 = Conv2D(filters=10, kernel_size=(7,3), strides=(1,1), activation='relu', name='conv1')
+    self.conv1 = Conv2D(filters=10, kernel_size=(7,3), strides=(1,1), kernel_initializer=GlorotUniform(seed=1), activation='relu', name='conv1')
     self.max1 = MaxPool2D(pool_size=(1,3), strides=(1,3), name='max1')
-    self.conv2 = Conv2D(filters=20, kernel_size=(3,3), strides=(1,1), activation='relu', name='conv2')
+    self.conv2 = Conv2D(filters=20, kernel_size=(3,3), strides=(1,1), kernel_initializer=GlorotUniform(seed=1), activation='relu', name='conv2')
     self.max2 = MaxPool2D(pool_size=(1,3), strides=(1,3), name='max2')
     self.pre_flatten = Flatten(name='pre_flatten')
     self.pre_fc = Dense(units=N_CLASSES, activation="relu", name='pre-final')
@@ -172,14 +173,14 @@ def _print_epoch_summary(epoch, metrics, start, end):
   text = f'Epoch {epoch + 1}, '
   for metric in metrics:
     text += f'{metric.name}: {metric.result():.3f}, '
-  text += f'time: {end - start}s'
+  text += f'time: {(end-start):.3f}s'
   print(text)
 
 def _epoch_file_postfix(epoch, metrics, start, end):
   text = f'epoch_{epoch + 1}-'
   for metric in metrics:
-    text += f'_{metric.name}-{metric.result():.3f}, '
-  text += f'time_{(end - start):.3f}s'
+    text += f'_{metric.name}-{metric.result():.3f}'
+  text += f'time_{(end-start):.3f}s'
   return text
 
 def _print_prediction_summary(preds):
