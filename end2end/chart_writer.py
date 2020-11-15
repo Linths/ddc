@@ -89,14 +89,14 @@ def create_chart_dir(
     predicted_steps = [num2step(x) for x in labels] #test(test_ds_loaded)]
     
     print('Creating chart text')
-    #time_to_step = {t : step for t, step in enumerate(predicted_steps)}
-    time_to_step = {int(round(t * _HZ)) : step for t, step in enumerate(predicted_steps)}
+    time_to_step = {t : step for t, step in enumerate(predicted_steps)}
+    #time_to_step = {int(round(t * _HZ)) : step for t, step in enumerate(predicted_steps)}
     max_subdiv = max(time_to_step.keys())
     if max_subdiv % _SUBDIV != 0:
       max_subdiv += _SUBDIV - (max_subdiv % _SUBDIV)
-    full_steps = [time_to_step.get(i, EMPTY_STEP) for i in range(max_subdiv)]
+    full_steps = [time_to_step.get(i, num2step(EMPTY_STEP)) for i in range(max_subdiv)]
     measures = [full_steps[i:i+_SUBDIV] for i in range(0, max_subdiv, _SUBDIV)]
-    measures_txt = '\n,\n'.join(['\n'.join(str(measure)) for measure in measures])
+    measures_txt = '\n,\n'.join(['\n'.join(measure) for measure in measures])
     chart_txt = _CHART_TEMPL.format(
       ccoarse=_DIFFS[coarse],
       cfine=fine,
