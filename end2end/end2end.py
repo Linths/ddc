@@ -150,14 +150,16 @@ elif RUN_MODE == RunMode.TEST_ONLY_PRE:
   pre_model.load_weights("pre-weights/2020-11-15 13_08_29/pre-weights epoch 40, train_loss 2.059, train_accuracy 0.635, test_loss 5.609, test_accuracy 0.845, time 127.518s")
   assert pre_model.variables != []
 
-  predictions = run_total(model,
-            train_ds=None, #train_ds,
+  predictions = run_total(pre_model,
+            train_ds=None,
             test_ds=one_ds,
             train_step_fn=None,
-            test_step_fn=finetest_step,
+            test_step_fn=pretest_step,
             epochs=1,
             metrics=all_metrics,
             weights_file=None)
+  
+  write(predictions)
 
 elif RUN_MODE == RunMode.TRAIN_BASIC:
   model = ChoreographModel()
