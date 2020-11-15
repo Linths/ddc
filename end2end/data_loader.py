@@ -111,10 +111,13 @@ def _split_classes(ds):
     print(f'Counting for label {i}')
     count = ds_len(class_ds)
     class_counts.append(count)
-    print(f'\tSaving dataset of size {count}')
-    tf.data.experimental.save(class_ds, f'{SPLIT_TRAIN_TF_DIR}/{i}')
+    if count != 0:
+      print(f'\tSaving dataset of size {count}')
+      tf.data.experimental.save(class_ds, f'{SPLIT_TRAIN_TF_DIR}/{i}')
+    else:
+      print('Skipping saving because 0 count')
     end = timer()
-    print(f'\tCounting & saving took {(end-start):.3f}s')
+    print(f'\tCounting & possibly saving took {(end-start):.3f}s')
   print(class_counts)
   
   end_all = timer()
@@ -144,13 +147,12 @@ def stratified_sample(input_ds, class_size=200):
     print(f'Label {i} with original count {class_counts[i]}')
     start = timer()
     if class_counts[i] == 0:
-      print('Skip repeating due to no samples')
-      balanced_class_ds = ds
+      print('Skip dataset due to no samples')
     else:
       balanced_class_ds = ds.repeat().take(class_size)
+      balanced_class_dss.append(balanced_class_ds)
       # print(ds_len(balanced_class_ds)) # Commented to save redundant iterations
     end = timer()
     print(f'-> took {(end-start):.3f}s')
-    balanced_class_dss.append(balanced_class_ds)
   balanced_ds = tf.data.experimental.sample_from_datasets(balanced_class_dss, seed=1)
   return balanced_ds
