@@ -144,7 +144,8 @@ def run_total(model, test_ds, test_step_fn,
     for feats, labels in test_ds:
       last_layer = test_step_fn(feats, labels, model)
       preds = np.argmax(last_layer, axis=1)
-      _print_prediction_summary(preds)
+      if epoch % 50 == 0:
+        _print_prediction_summary(preds)
       if show_confmat:
         y_true.extend(labels)
         y_pred.extend(preds)
@@ -177,10 +178,10 @@ def _print_epoch_summary(epoch, metrics, start, end):
   print(text)
 
 def _epoch_file_postfix(epoch, metrics, start, end):
-  text = f'epoch_{epoch + 1}-'
+  text = f' epoch {epoch + 1}, '
   for metric in metrics:
-    text += f'_{metric.name}-{metric.result():.3f}'
-  text += f'time_{(end-start):.3f}s'
+    text += f'{metric.name} {metric.result():.3f}, '
+  text += f'time {(end-start):.3f}s'
   return text
 
 def _print_prediction_summary(preds):

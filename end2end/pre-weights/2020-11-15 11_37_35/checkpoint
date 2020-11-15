@@ -1,0 +1,2 @@
+model_checkpoint_path: "pre-weights epoch 163, train_loss 2.067, train_accuracy 0.644, test_loss 8.357, test_accuracy 0.124, time 7.949s"
+all_model_checkpoint_paths: "pre-weights epoch 163, train_loss 2.067, train_accuracy 0.644, test_loss 8.357, test_accuracy 0.124, time 7.949s"
