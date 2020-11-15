@@ -105,12 +105,15 @@ def _split_classes(ds):
   print(f'Filtering each label took {(end-start):.3f}s')
   
   start_all = timer()
-  class_counts = []
+  #class_counts = []
+  # Hardcoding class counts already calculated to save time
+  class_counts = [943561, 3602, 82, 45, 3793, 30, 0, 10, 74, 1, 0, 9, 38, 7, 10, 0, 3730, 36, 0, 13, 101, 0, 0, 0, 1, 0, 0, 0, 24, 0, 0, 0, 65, 0, 0, 12, 1, 0, 0, 0, 4, 0, 0, 0, 23, 0, 0, 0, 26, 11, 11, 0, 18, 0, 0, 0, 29, 0, 0, 0, 4, 0, 0, 0, 3608, 216, 2, 19, 35, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 25, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 2, 23, 11, 0, 0, 0, 0, 2, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31, 9, 14, 23, 10, 0, 0, 0, 9, 0, 0, 0, 2, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   for i, class_ds in enumerate(class_dss):
     start = timer()
     print(f'Counting for label {i}')
-    count = ds_len(class_ds)
-    class_counts.append(count)
+    #count = ds_len(class_ds)
+    #class_counts.append(count)
+    count = class_counts[i]
     if count != 0:
       print(f'\tSaving dataset of size {count}')
       tf.data.experimental.save(class_ds, f'{SPLIT_TRAIN_TF_DIR}/{i}')
