@@ -8,7 +8,7 @@ class RunMode(Enum):
 
 RUN_MODE = RunMode.WITH_PRE_TRAIN
 BUILD_DATASET = False
-BUILD_BALANCED_DATASET = True
+BUILD_BALANCED_DATASET = False
 BUILD_SPLIT_DATASET = False
 
 timestamp = datetime.datetime.now().replace(microsecond=0).strftime('%Y-%m-%d %H_%M_%S')
@@ -25,6 +25,7 @@ BALANCED_TRAIN_TF_DIR = f'{TF_DIR}/balanced-train'
 SPLIT_TRAIN_TF_DIR = f'{TF_DIR}/split-train'
 
 EPOCHS = 1000
+PRINT_EVERY_EPOCHS = 1
 CONTEXT = 7
 WINDOW = 2*CONTEXT+1
 BATCH_SIZE = 256

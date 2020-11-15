@@ -71,6 +71,8 @@ test_kwargs = {'is_train': False, 'is_weighted': False, 'loss_object': loss_obje
 
 if RUN_MODE == RunMode.WITH_PRE_TRAIN:
   pre_model = PreTrainModel()
+  mock_ds = [(np.zeros((BATCH_SIZE,WINDOW,80,3)), np.zeros(BATCH_SIZE))]
+ 
   @tf.function
   def pretrain_step(x,y,m):
       return run_step(x, y, m,
@@ -84,19 +86,19 @@ if RUN_MODE == RunMode.WITH_PRE_TRAIN:
             is_finetuning=False,
             **test_kwargs)
   run_total(pre_model,
-            train_ds=balanced_train_ds,
-            test_ds=test_ds,
+            train_ds=mock_ds, #balanced_train_ds,
+            test_ds=mock_ds, #test_ds,
             train_step_fn=pretrain_step,
             test_step_fn=pretest_step,
-            epochs=EPOCHS,
+            epochs=1, #EPOCHS,
             metrics=all_metrics,
-            weights_file=PRE_WEIGHTS_FILE)
+            weights_file=None) #PRE_WEIGHTS_FILE)
 
   model = ChoreographModel()
   load_pretrained_weights(
             pretrain_model=pre_model,
             finetune_model=model,
-            preweights_file=PRE_WEIGHTS_FILE)
+            preweights_file="pre-weights/2020-11-15 13_08_29/pre-weights epoch 40, train_loss 2.059, train_accuracy 0.635, test_loss 5.609, test_accuracy 0.845, time 127.518s")
   @tf.function
   def finetrain_step(x,y,m):
     return run_step(x, y, m,
@@ -111,7 +113,7 @@ if RUN_MODE == RunMode.WITH_PRE_TRAIN:
             is_finetuning=True,
             **test_kwargs)
   run_total(model,
-            train_ds=train_ds,
+            train_ds=balanced_train_ds, #train_ds,
             test_ds=test_ds,
             train_step_fn=finetrain_step,
             test_step_fn=finetest_step,

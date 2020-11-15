@@ -10,7 +10,7 @@ import seaborn as sns
 import subprocess
 
 from util2 import num2step
-from settings import N_CLASSES
+from settings import N_CLASSES, PRINT_EVERY_EPOCHS
 
 class ChoreographModel(Model):
   def __init__(self):
@@ -144,7 +144,7 @@ def run_total(model, test_ds, test_step_fn,
     for feats, labels in test_ds:
       last_layer = test_step_fn(feats, labels, model)
       preds = np.argmax(last_layer, axis=1)
-      if epoch % 50 == 0:
+      if epoch % PRINT_EVERY_EPOCHS == 0:
         _print_prediction_summary(preds)
       if show_confmat:
         y_true.extend(labels)
