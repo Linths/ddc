@@ -89,7 +89,8 @@ def create_chart_dir(
     predicted_steps = [num2step(x) for x in labels] #test(test_ds_loaded)]
     
     print('Creating chart text')
-    time_to_step = {t : step for t, step in enumerate(predicted_steps)}
+    #time_to_step = {t : step for t, step in enumerate(predicted_steps)}
+    time_to_step = {int(round(t * _HZ)) : step for t, step in enumerate(predicted_steps)}
     max_subdiv = max(time_to_step.keys())
     if max_subdiv % _SUBDIV != 0:
       max_subdiv += _SUBDIV - (max_subdiv % _SUBDIV)
