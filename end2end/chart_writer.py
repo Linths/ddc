@@ -166,8 +166,8 @@ def write(labels):
   # Perhaps some preloading of the model
 
   artist = 'Fraxtil'
-  title = 'Inner Universe (Extended Mix)'
-  audio_fp = 'Inner Universe (Extended Mix).ogg' #'Black_Magic.ogg'
+  title = 'Mess' #Inner Universe (Extended Mix)'
+  audio_fp = 'Mess.ogg' # 'Inner Universe (Extended Mix).ogg' #'Black_Magic.ogg'
   diffs = ['Easy'] #['Beginner', 'Easy', 'Medium', 'Hard', 'Challenge']
   out_dir = "output"
   create_chart_closure(artist=artist, title=title, audio_fp=audio_fp, norm=norm, analyzers=analyzers, diffs=diffs, idx_to_label=idx_to_label, labels=labels, out_dir=out_dir)
