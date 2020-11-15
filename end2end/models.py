@@ -160,6 +160,8 @@ def run_total(model, test_ds, test_step_fn,
   
   if show_confmat:
     _show_confmat(y_true, y_pred)
+  
+  return y_pred
 
 
 def _show_confmat(y_true, y_pred):

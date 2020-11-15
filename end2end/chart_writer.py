@@ -52,7 +52,7 @@ def create_chart_dir(
     audio_fp,
     norm, analyzers,
     diffs, idx_to_label,
-    out_dir, delete_audio=False):
+    labels, out_dir, delete_audio=False):
   if not artist or not title:
     print('Extracting metadata from {}'.format(audio_fp))
     meta_reader = MetadataReader(filename=audio_fp)
@@ -86,7 +86,7 @@ def create_chart_dir(
     # TODO: Convert audio to feats & do prediction magic
     # FIXME: Hardcoded test_ds_loaded, instead of extracting feats from audio
 
-    predicted_steps = [num2step(x) for x in test(test_ds_loaded)]
+    predicted_steps = [num2step(x) for x in labels] #test(test_ds_loaded)]
     
     print('Creating chart text')
     time_to_step = {t : step for t, step in enumerate(predicted_steps)}
@@ -131,7 +131,7 @@ def create_chart_dir(
 
   return True
 
-def create_chart_closure(artist, title, audio_fp, norm, analyzers, diffs, idx_to_label, out_dir):
+def create_chart_closure(artist, title, audio_fp, norm, analyzers, diffs, idx_to_label, labels, out_dir):
   song_id = uuid.uuid4()
   out_dir = os.path.join(out_dir, str(song_id))
   try:
@@ -150,7 +150,7 @@ def create_chart_closure(artist, title, audio_fp, norm, analyzers, diffs, idx_to
     raise CreateChartException('Unknown chart creation exception')
   return
 
-def write():
+def write(labels):
   print('Loading band norms')
   with open('write_settings/norm.pkl', 'rb') as f:
     norm = pickle.load(f, encoding = 'bytes')
@@ -169,6 +169,6 @@ def write():
   audio_fp = 'Inner Universe (Extended Mix).ogg' #'Black_Magic.ogg'
   diffs = ['Easy'] #['Beginner', 'Easy', 'Medium', 'Hard', 'Challenge']
   out_dir = "output"
-  create_chart_closure(artist=artist, title=title, audio_fp=audio_fp, norm=norm, analyzers=analyzers, diffs=diffs, idx_to_label=idx_to_label, out_dir=out_dir)
+  create_chart_closure(artist=artist, title=title, audio_fp=audio_fp, norm=norm, analyzers=analyzers, diffs=diffs, idx_to_label=idx_to_label, labels=labels, out_dir=out_dir)
 
 write()

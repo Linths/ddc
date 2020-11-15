@@ -12,8 +12,9 @@ import math
 from util import *
 from util2 import num2step
 from models import ChoreographModel, PreTrainModel, run_step, run_total, load_pretrained_weights
-from settings import RunMode, RUN_MODE, BUILD_DATASET, BUILD_BALANCED_DATASET, WEIGHTS_FILE, PRE_WEIGHTS_FILE, DATA_DIR, TRAIN_DIR, TEST_DIR, TF_DIR, TRAIN_TF_DIR, TEST_TF_DIR, BALANCED_TRAIN_TF_DIR, EPOCHS, CONTEXT, WINDOW, BATCH_SIZE, N_CLASSES
+from settings import RunMode, RUN_MODE, BUILD_DATASET, BUILD_BALANCED_DATASET, WEIGHTS_FILE, PRE_WEIGHTS_FILE, DATA_DIR, TRAIN_DIR, TEST_DIR, TF_DIR, TRAIN_TF_DIR, TEST_TF_DIR, ONE_TF_DIR, BALANCED_TRAIN_TF_DIR, EPOCHS, CONTEXT, WINDOW, BATCH_SIZE, N_CLASSES
 from data_loader import build_dataset, load_dataset, undersample, stratified_sample
+from chart_writer import write
 
 np.set_printoptions(precision=3)
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
@@ -25,6 +26,7 @@ if BUILD_DATASET:
 
 train_ds = load_dataset(TRAIN_TF_DIR, name='train')
 test_ds = load_dataset(TEST_TF_DIR, name='test')
+one_ds = load_dataset(ONE_TF_DIR, name='one')
 
 if BUILD_BALANCED_DATASET:
   start = timer()
@@ -120,6 +122,42 @@ if RUN_MODE == RunMode.WITH_PRE_TRAIN:
             epochs=EPOCHS,
             metrics=all_metrics,
             weights_file=WEIGHTS_FILE)
+
+elif RUN_MODE == RunMode.TEST_ONLY_PRE:
+  pre_model = PreTrainModel()
+  mock_ds = [(np.zeros((BATCH_SIZE,WINDOW,80,3)), np.zeros(BATCH_SIZE))]
+ 
+  @tf.function
+  def pretrain_step(x,y,m):
+      return run_step(x, y, m,
+            is_weighted=False,
+            is_finetuning=False,
+            optimizer=pre_optimizer,
+            **train_kwargs)
+  @tf.function
+  def pretest_step(x,y,m):
+    return run_step(x, y, m,
+            is_finetuning=False,
+            **test_kwargs)
+  run_total(pre_model,
+            train_ds=mock_ds, #balanced_train_ds,
+            test_ds=mock_ds, #test_ds,
+            train_step_fn=pretrain_step,
+            test_step_fn=pretest_step,
+            epochs=1, #EPOCHS,
+            metrics=all_metrics,
+            weights_file=None) #PRE_WEIGHTS_FILE)
+  pre_model.load_weights("pre-weights/2020-11-15 13_08_29/pre-weights epoch 40, train_loss 2.059, train_accuracy 0.635, test_loss 5.609, test_accuracy 0.845, time 127.518s")
+  assert pre_model.variables != []
+
+  predictions = run_total(model,
+            train_ds=None, #train_ds,
+            test_ds=one_ds,
+            train_step_fn=None,
+            test_step_fn=finetest_step,
+            epochs=1,
+            metrics=all_metrics,
+            weights_file=None)
 
 elif RUN_MODE == RunMode.TRAIN_BASIC:
   model = ChoreographModel()
