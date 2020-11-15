@@ -124,12 +124,13 @@ def load_pretrained_weights(pretrain_model, finetune_model, preweights_file):
 def run_total(model, test_ds, test_step_fn,
               epochs, metrics, weights_file=None,
               train_ds=None, train_step_fn=None,
-              show_confmat=False):
+              show_confmat=False, ret_preds=False):
   print(f"Train and test for {epochs} epochs")
 
   if weights_file != None:
     subprocess.run(["cp", "settings.py", weights_file])
 
+  y_pred = []
   for epoch in range(epochs):
     start = timer()
     for metric in metrics:
@@ -148,6 +149,7 @@ def run_total(model, test_ds, test_step_fn,
         _print_prediction_summary(preds)
       if show_confmat:
         y_true.extend(labels)
+      if show_confmat or ret_preds:
         y_pred.extend(preds)
 
     end = timer()

@@ -40,6 +40,7 @@ else:
 
 train_ds = train_ds.batch(BATCH_SIZE)
 test_ds = test_ds.batch(BATCH_SIZE)
+one_ds = one_ds.batch(BATCH_SIZE)
 balanced_train_ds = balanced_train_ds.batch(BATCH_SIZE)
 
 
@@ -157,8 +158,9 @@ elif RUN_MODE == RunMode.TEST_ONLY_PRE:
             test_step_fn=pretest_step,
             epochs=1,
             metrics=all_metrics,
-            weights_file=None)
-  
+            weights_file=None,
+            ret_preds=True)
+  print(f'Predictions len is {len(predictions)}')
   write(predictions)
 
 elif RUN_MODE == RunMode.TRAIN_BASIC:

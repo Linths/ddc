@@ -95,7 +95,7 @@ def create_chart_dir(
       max_subdiv += _SUBDIV - (max_subdiv % _SUBDIV)
     full_steps = [time_to_step.get(i, EMPTY_STEP) for i in range(max_subdiv)]
     measures = [full_steps[i:i+_SUBDIV] for i in range(0, max_subdiv, _SUBDIV)]
-    measures_txt = '\n,\n'.join(['\n'.join(measure) for measure in measures])
+    measures_txt = '\n,\n'.join(['\n'.join(str(measure)) for measure in measures])
     chart_txt = _CHART_TEMPL.format(
       ccoarse=_DIFFS[coarse],
       cfine=fine,
@@ -143,6 +143,7 @@ def create_chart_closure(artist, title, audio_fp, norm, analyzers, diffs, idx_to
       analyzers=analyzers,
       diffs=diffs,
       idx_to_label=idx_to_label,
+      labels=labels,
       out_dir=out_dir)
   except CreateChartException as e:
     raise e
