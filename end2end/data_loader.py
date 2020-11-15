@@ -6,7 +6,7 @@ import numpy as np
 
 from util import *
 from util2 import reduce2np, files_in, ds_len, prefix_print, num2step
-from settings import CONTEXT, WINDOW, N_CLASSES, BATCH_SIZE, SPLIT_TRAIN_TF_DIR
+from settings import CONTEXT, WINDOW, N_CLASSES, BATCH_SIZE, SPLIT_TRAIN_TF_DIR, BUILD_SPLIT_DATASET
 
 # Loading data
 def __song_gen(song_path):
@@ -99,32 +99,48 @@ def oversample(ds):
   return balanced_ds
 
 def _split_classes(ds):
-  start = timer()
-  class_dss = [ds.filter(lambda feats, label: label == i) for i in range(N_CLASSES)]
-  end = timer()
-  print(f'Filtering each label took {(end-start):.3f}s')
-  
-  start_all = timer()
-  #class_counts = []
   # Hardcoding class counts already calculated to save time
+  #class_counts = []
   class_counts = [943561, 3602, 82, 45, 3793, 30, 0, 10, 74, 1, 0, 9, 38, 7, 10, 0, 3730, 36, 0, 13, 101, 0, 0, 0, 1, 0, 0, 0, 24, 0, 0, 0, 65, 0, 0, 12, 1, 0, 0, 0, 4, 0, 0, 0, 23, 0, 0, 0, 26, 11, 11, 0, 18, 0, 0, 0, 29, 0, 0, 0, 4, 0, 0, 0, 3608, 216, 2, 19, 35, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 25, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 2, 23, 11, 0, 0, 0, 0, 2, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31, 9, 14, 23, 10, 0, 0, 0, 9, 0, 0, 0, 2, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-  for i, class_ds in enumerate(class_dss):
-    start = timer()
-    print(f'Counting for label {i}')
-    #count = ds_len(class_ds)
-    #class_counts.append(count)
-    count = class_counts[i]
-    if count != 0:
-      print(f'\tSaving dataset of size {count}')
-      tf.data.experimental.save(class_ds, f'{SPLIT_TRAIN_TF_DIR}/{i}')
-    else:
-      print('Skipping saving because 0 count')
-    end = timer()
-    print(f'\tCounting & possibly saving took {(end-start):.3f}s')
-  print(class_counts)
   
-  end_all = timer()
-  print(f'Total counting & saving took {(end_all-start_all):.3f}s')
+  if BUILD_SPLIT_DATASET:
+    start = timer()
+    class_dss = [ds.filter(lambda feats, label: label == i) for i in range(N_CLASSES)]
+    end = timer()
+    print(f'Filtering each label took {(end-start):.3f}s')
+    
+    start_all = timer()
+    for i, class_ds in enumerate(class_dss):
+      start = timer()
+      print(f'Count for label {i}')
+      #count = ds_len(class_ds)
+      #class_counts.append(count)
+      count = class_counts[i]
+      if count != 0:
+        print(f'\tSave dataset of size {count}')
+        tf.data.experimental.save(class_ds, f'{SPLIT_TRAIN_TF_DIR}/{i}')
+      else:
+        print('\tSkip saving because 0 count')
+      end = timer()
+      print(f'\tCounting & possibly saving took {(end-start):.3f}s')
+    end_all = timer()
+    print(f'Total counting & saving took {(end_all-start_all):.3f}s')
+
+  else:
+    class_dss = []
+    for i, count in enumerate(class_counts):
+      start = timer()
+      if count != 0:
+        print(f'\tLoad dataset of size {count}')
+        class_ds = load_dataset(f'{SPLIT_TRAIN_TF_DIR}/{i}', name=f'class_{i}')
+        class_dss.append(class_ds)
+      else:
+        print('\tSkip loading because 0 count')
+        class_ds.append(None)
+      end = timer()
+      print(f'\tLoading saving took {(end-start):.3f}s')
+
+  print(class_counts)
   print([(num2step(x),y) for x,y in enumerate(class_counts) if y != 0])
   return class_dss, class_counts
 
@@ -149,7 +165,7 @@ def stratified_sample(input_ds, class_size=200):
   for i,ds in enumerate(class_dss):
     print(f'Label {i} with original count {class_counts[i]}')
     start = timer()
-    if class_counts[i] == 0:
+    if ds == None or class_counts[i] == 0:
       print('Skip dataset due to no samples')
     else:
       balanced_class_ds = ds.repeat().take(class_size)
@@ -157,5 +173,8 @@ def stratified_sample(input_ds, class_size=200):
       # print(ds_len(balanced_class_ds)) # Commented to save redundant iterations
     end = timer()
     print(f'-> took {(end-start):.3f}s')
+  print(len(balanced_class_dss))
+  print('Start with making balanced_ds')
   balanced_ds = tf.data.experimental.sample_from_datasets(balanced_class_dss, seed=1)
+  print('Done with making balanced_ds')
   return balanced_ds

@@ -9,6 +9,7 @@ class RunMode(Enum):
 RUN_MODE = RunMode.WITH_PRE_TRAIN
 BUILD_DATASET = False
 BUILD_BALANCED_DATASET = True
+BUILD_SPLIT_DATASET = False
 
 timestamp = datetime.datetime.now().replace(microsecond=0).strftime('%Y-%m-%d %H_%M_%S')
 WEIGHTS_FILE = f'weights/{timestamp}/weights'
