@@ -136,7 +136,7 @@ def _split_classes(ds):
         class_dss.append(class_ds)
       else:
         print('\tSkip loading because 0 count')
-        class_ds.append(None)
+        class_dss.append(None)
       end = timer()
       print(f'\tLoading saving took {(end-start):.3f}s')
 
