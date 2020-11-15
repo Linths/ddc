@@ -163,6 +163,48 @@ elif RUN_MODE == RunMode.TEST_ONLY_PRE:
   print(f'Predictions len is {len(predictions)}')
   write(predictions)
 
+elif RUN_MODE == RunMode.TEST_FINETUNE:
+  model = ChoreographModel()
+  mock_ds = [(np.zeros((BATCH_SIZE,WINDOW,80,3)), np.zeros(BATCH_SIZE))]
+ 
+  @tf.function
+  def finetrain_step(x,y,m):
+    return run_step(x, y, m,
+            is_weighted=False,
+            is_finetuning=True,
+            optimizer=res_optimizer,
+            optimizer_pretrained_layers=cnn_optimizer,
+            **train_kwargs)
+  @tf.function
+  def finetest_step(x,y,m):
+    return run_step(x, y, m,
+            is_finetuning=True,
+            **test_kwargs)
+  run_total(model,
+            train_ds=mock_ds,
+            test_ds=mock_ds,
+            train_step_fn=finetrain_step,
+            test_step_fn=finetest_step,
+            epochs=1,
+            metrics=all_metrics,
+            weights_file=None)
+  weights_dir = "weights/2020-11-15 15_42_00/weights epoch 6, train_loss 0.143, train_accuracy 0.940, test_loss 2.477, test_accuracy 0.382, time 578.552s"
+  model.load_weights(weights_dir)
+  assert model.variables != []
+
+  predictions = run_total(model,
+            train_ds=None,
+            test_ds=one_ds,
+            train_step_fn=None,
+            test_step_fn=finetest_step,
+            epochs=1,
+            metrics=all_metrics,
+            weights_file=None,
+            ret_preds=True)
+  print(f'Predictions len is {len(predictions)}')
+  write(predictions)
+
+
 elif RUN_MODE == RunMode.TRAIN_BASIC:
   model = ChoreographModel()
   @tf.function
