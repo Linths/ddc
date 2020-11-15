@@ -171,4 +171,3 @@ def write(labels):
   out_dir = "output"
   create_chart_closure(artist=artist, title=title, audio_fp=audio_fp, norm=norm, analyzers=analyzers, diffs=diffs, idx_to_label=idx_to_label, labels=labels, out_dir=out_dir)
 
-write()
