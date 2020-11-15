@@ -112,7 +112,7 @@ def _split_classes(ds):
     count = ds_len(class_ds)
     class_counts.append(count)
     print(f'\tSaving dataset of size {count}')
-    tf.data.experimental.save(class_ds, f'{SPLIT_TRAIN_TF_DIR}/i')
+    tf.data.experimental.save(class_ds, f'{SPLIT_TRAIN_TF_DIR}/{i}')
     end = timer()
     print(f'\tCounting & saving took {(end-start):.3f}s')
   print(class_counts)

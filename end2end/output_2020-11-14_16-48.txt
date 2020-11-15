@@ -1,0 +1,543 @@
+Num GPUs Available:  1
+[train] Loaded 959548 in 0.7999363039999707 sec.
+[test] Loaded 135365 in 0.00728957600006197 sec.
+[<FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>, <FilterDataset shapes: ((15, 80, 3), ()), types: (tf.float32, tf.uint8)>]
+[943561, 3602, 82, 45, 3793, 30, 0, 10, 74, 1, 0, 9, 38, 7, 10, 0, 3730, 36, 0, 13, 101, 0, 0, 0, 1, 0, 0, 0, 24, 0, 0, 0, 65, 0, 0, 12, 1, 0, 0, 0, 4, 0, 0, 0, 23, 0, 0, 0, 26, 11, 11, 0, 18, 0, 0, 0, 29, 0, 0, 0, 4, 0, 0, 0, 3608, 216, 2, 19, 35, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 25, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 2, 23, 11, 0, 0, 0, 0, 2, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31, 9, 14, 23, 10, 0, 0, 0, 9, 0, 0, 0, 2, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[('0000', 943561), ('0001', 3602), ('0002', 82), ('0003', 45), ('0010', 3793), ('0011', 30), ('0013', 10), ('0020', 74), ('0021', 1), ('0023', 9), ('0030', 38), ('0031', 7), ('0032', 10), ('0100', 3730), ('0101', 36), ('0103', 13), ('0110', 101), ('0120', 1), ('0130', 24), ('0200', 65), ('0203', 12), ('0210', 1), ('0220', 4), ('0230', 23), ('0300', 26), ('0301', 11), ('0302', 11), ('0310', 18), ('0320', 29), ('0330', 4), ('1000', 3608), ('1001', 216), ('1002', 2), ('1003', 19), ('1010', 35), ('1030', 11), ('1100', 25), ('1111', 9), ('1200', 1), ('1300', 9), ('2000', 64), ('2001', 2), ('2002', 23), ('2003', 11), ('2020', 2), ('2030', 10), ('2200', 2), ('2300', 7), ('3000', 31), ('3001', 9), ('3002', 14), ('3003', 23), ('3010', 10), ('3020', 9), ('3030', 2), ('3100', 12), ('3200', 9), ('3300', 2)]
+Class splitting took 6328.719s
+[3602, 82, 45, 3793, 30, 0, 10, 74, 1, 0, 9, 38, 7, 10, 0, 3730, 36, 0, 13, 101, 0, 0, 0, 1, 0, 0, 0, 24, 0, 0, 0, 65, 0, 0, 12, 1, 0, 0, 0, 4, 0, 0, 0, 23, 0, 0, 0, 26, 11, 11, 0, 18, 0, 0, 0, 29, 0, 0, 0, 4, 0, 0, 0, 3608, 216, 2, 19, 35, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 25, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 2, 23, 11, 0, 0, 0, 0, 2, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31, 9, 14, 23, 10, 0, 0, 0, 9, 0, 0, 0, 2, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+943561 empties, 15987 others
+"0010" is the most popular non-empty, appears 3793 times.
+Converting every class to have size 200
+Label 0 with original count 943561
+-> took 0.015s
+Label 1 with original count 3602
+-> took 0.000s
+Label 2 with original count 82
+-> took 0.000s
+Label 3 with original count 45
+-> took 0.000s
+Label 4 with original count 3793
+-> took 0.000s
+Label 5 with original count 30
+-> took 0.000s
+Label 6 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 7 with original count 10
+-> took 0.000s
+Label 8 with original count 74
+-> took 0.000s
+Label 9 with original count 1
+-> took 0.000s
+Label 10 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 11 with original count 9
+-> took 0.000s
+Label 12 with original count 38
+-> took 0.000s
+Label 13 with original count 7
+-> took 0.000s
+Label 14 with original count 10
+-> took 0.000s
+Label 15 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 16 with original count 3730
+-> took 0.000s
+Label 17 with original count 36
+-> took 0.000s
+Label 18 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 19 with original count 13
+-> took 0.000s
+Label 20 with original count 101
+-> took 0.000s
+Label 21 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 22 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 23 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 24 with original count 1
+-> took 0.000s
+Label 25 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 26 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 27 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 28 with original count 24
+-> took 0.000s
+Label 29 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 30 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 31 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 32 with original count 65
+-> took 0.000s
+Label 33 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 34 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 35 with original count 12
+-> took 0.000s
+Label 36 with original count 1
+-> took 0.000s
+Label 37 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 38 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 39 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 40 with original count 4
+-> took 0.000s
+Label 41 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 42 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 43 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 44 with original count 23
+-> took 0.000s
+Label 45 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 46 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 47 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 48 with original count 26
+-> took 0.000s
+Label 49 with original count 11
+-> took 0.000s
+Label 50 with original count 11
+-> took 0.000s
+Label 51 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 52 with original count 18
+-> took 0.000s
+Label 53 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 54 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 55 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 56 with original count 29
+-> took 0.000s
+Label 57 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 58 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 59 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 60 with original count 4
+-> took 0.000s
+Label 61 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 62 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 63 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 64 with original count 3608
+-> took 0.000s
+Label 65 with original count 216
+-> took 0.000s
+Label 66 with original count 2
+-> took 0.000s
+Label 67 with original count 19
+-> took 0.000s
+Label 68 with original count 35
+-> took 0.000s
+Label 69 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 70 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 71 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 72 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 73 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 74 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 75 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 76 with original count 11
+-> took 0.000s
+Label 77 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 78 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 79 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 80 with original count 25
+-> took 0.000s
+Label 81 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 82 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 83 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 84 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 85 with original count 9
+-> took 0.000s
+Label 86 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 87 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 88 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 89 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 90 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 91 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 92 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 93 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 94 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 95 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 96 with original count 1
+-> took 0.001s
+Label 97 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 98 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 99 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 100 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 101 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 102 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 103 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 104 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 105 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 106 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 107 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 108 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 109 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 110 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 111 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 112 with original count 9
+-> took 0.001s
+Label 113 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 114 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 115 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 116 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 117 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 118 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 119 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 120 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 121 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 122 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 123 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 124 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 125 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 126 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 127 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 128 with original count 64
+-> took 0.000s
+Label 129 with original count 2
+-> took 0.000s
+Label 130 with original count 23
+-> took 0.000s
+Label 131 with original count 11
+-> took 0.000s
+Label 132 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 133 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 134 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 135 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 136 with original count 2
+-> took 0.000s
+Label 137 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 138 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 139 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 140 with original count 10
+-> took 0.000s
+Label 141 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 142 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 143 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 144 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 145 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 146 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 147 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 148 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 149 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 150 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 151 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 152 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 153 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 154 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 155 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 156 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 157 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 158 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 159 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 160 with original count 2
+-> took 0.000s
+Label 161 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 162 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 163 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 164 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 165 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 166 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 167 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 168 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 169 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 170 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 171 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 172 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 173 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 174 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 175 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 176 with original count 7
+-> took 0.000s
+Label 177 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 178 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 179 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 180 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 181 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 182 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 183 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 184 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 185 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 186 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 187 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 188 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 189 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 190 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 191 with original count 0
+Skip repeating due to no samples
+-> took 0.000s
+Label 192 with original count 31
+-> took 0.000s
+Label 193 with original count 9
+-> took 0.000s
